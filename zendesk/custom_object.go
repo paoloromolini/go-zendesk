@@ -40,6 +40,14 @@ type CustomObjectAPI interface {
 	UpdateCustomObjectRecord(
 		ctx context.Context, customObjectKey string, customObjectRecordID string, record CustomObjectRecord,
 	) (*CustomObjectRecord, error)
+	GetSourcesByTarget(
+		ctx context.Context,
+		fieldID string,
+		sourceType string,
+		targetID string,
+		targetType string,
+		opts *PageOptions,
+	) ([]CustomObjectRecord, Page, error)
 }
 
 // CustomObjectAutocompleteOptions custom object search options
@@ -211,4 +219,36 @@ func (z *Client) UpdateCustomObjectRecord(
 		return nil, err
 	}
 	return &result.CustomObjectRecord, nil
+}
+
+// GetSourcesByTarget Returns a list of source objects whose values are populated with the id of a related target object
+// https://developer.zendesk.com/api-reference/ticketing/lookup_relationships/lookup_relationships/#get-sources-by-target
+func (z *Client) GetSourcesByTarget(
+	ctx context.Context,
+	targetType string,
+	targetID string,
+	fieldID string,
+	sourceType string,
+	opts *PageOptions,
+) ([]CustomObjectRecord, Page, error) {
+	var result struct {
+		CustomObjectRecords []CustomObjectRecord `json:"custom_object_records"`
+		Page
+	}
+	tmp := opts
+	if tmp == nil {
+		tmp = &PageOptions{}
+	}
+	url := fmt.Sprintf("/%s/%s/relationship_fields/%s/%s", targetType, targetID, fieldID, sourceType)
+	urlWithOptions, err := addOptions(url, tmp)
+	body, err := z.get(ctx, urlWithOptions)
+
+	if err != nil {
+		return nil, Page{}, err
+	}
+	err = json.Unmarshal(body, &result)
+	if err != nil {
+		return nil, Page{}, err
+	}
+	return result.CustomObjectRecords, result.Page, nil
 }
