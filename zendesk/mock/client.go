@@ -1121,6 +1121,22 @@ func (mr *ClientMockRecorder) GetSLAPolicy(ctx, id any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSLAPolicy", reflect.TypeOf((*Client)(nil).GetSLAPolicy), ctx, id)
 }
 
+// GetSourcesByTarget mocks base method.
+func (m *Client) GetSourcesByTarget(arg0 context.Context, arg1, arg2, arg3, arg4 string, arg5 *zendesk.PageOptions) ([]zendesk.CustomObjectRecord, zendesk.Page, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetSourcesByTarget", arg0, arg1, arg2, arg3, arg4, arg5)
+	ret0, _ := ret[0].([]zendesk.CustomObjectRecord)
+	ret1, _ := ret[1].(zendesk.Page)
+	ret2, _ := ret[2].(error)
+	return ret0, ret1, ret2
+}
+
+// GetSourcesByTarget indicates an expected call of GetSourcesByTarget.
+func (mr *ClientMockRecorder) GetSourcesByTarget(arg0, arg1, arg2, arg3, arg4, arg5 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSourcesByTarget", reflect.TypeOf((*Client)(nil).GetSourcesByTarget), arg0, arg1, arg2, arg3, arg4, arg5)
+}
+
 // GetTarget mocks base method.
 func (m *Client) GetTarget(ctx context.Context, ticketID int64) (zendesk.Target, error) {
 	m.ctrl.T.Helper()
