@@ -48,6 +48,10 @@ type CustomObjectAPI interface {
 		targetType string,
 		opts *PageOptions,
 	) ([]CustomObjectRecord, Page, error)
+	DeleteCustomObjectRecord(
+		ctx context.Context,
+		record CustomObjectRecord,
+	) error
 }
 
 // CustomObjectAutocompleteOptions custom object search options
@@ -251,4 +255,18 @@ func (z *Client) GetSourcesByTarget(
 		return nil, Page{}, err
 	}
 	return result.CustomObjectRecords, result.Page, nil
+}
+
+// DeleteCustomObjectRecord Delete a custom object record
+// https://developer.zendesk.com/api-reference/custom-data/custom-objects/custom_object_records/#delete-custom-object-record
+func (z *Client) DeleteCustomObjectRecord(
+	ctx context.Context,
+	record CustomObjectRecord,
+) error {
+	endpointURL := fmt.Sprintf("/custom_objects/%s/records/%s", record.CustomObjectKey, record.ID)
+	err := z.delete(ctx, endpointURL)
+	if err != nil {
+		return err
+	}
+	return nil
 }
