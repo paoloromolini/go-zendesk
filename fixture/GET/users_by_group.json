@@ -1,0 +1,72 @@
+{
+    "users": [
+        {
+            "id": 369537351454,
+            "url": "https://example.zendesk.com/api/v2/users/369537351454.json",
+            "name": "nukosuke",
+            "email": "nukosuke@lavabit.com",
+            "created_at": "2018-11-23T16:05:12Z",
+            "updated_at": "2018-11-30T19:12:34Z",
+            "time_zone": "Tokyo",
+            "iana_time_zone": "Asia/Tokyo",
+            "phone": null,
+            "shared_phone_number": null,
+            "photo": {
+                "url": "https://example.zendesk.com/api/v2/attachments/360254032333.json",
+                "id": 360254032333,
+                "file_name": "profile_image_369537351454_9042965.png",
+                "content_url": "https://example.zendesk.com/system/photos/3602/5403/2333/profile_image_369537351454_9042965.png",
+                "mapped_content_url": "https://example.zendesk.com/system/photos/3602/5403/2333/profile_image_369537351454_9042965.png",
+                "content_type": "image/png",
+                "size": 4296,
+                "width": 80,
+                "height": 80,
+                "inline": false,
+                "thumbnails": [
+                    {
+                        "url": "https://example.zendesk.com/api/v2/attachments/360254032353.json",
+                        "id": 360254032353,
+                        "file_name": "profile_image_369537351454_9042965_thumb.png",
+                        "content_url": "https://example.zendesk.com/system/photos/3602/5403/2333/profile_image_369537351454_9042965_thumb.png",
+                        "mapped_content_url": "https://example.zendesk.com/system/photos/3602/5403/2333/profile_image_369537351454_9042965_thumb.png",
+                        "content_type": "image/png",
+                        "size": 1097,
+                        "width": 32,
+                        "height": 32,
+                        "inline": false
+                    }
+                ]
+            },
+            "locale_id": 1,
+            "locale": "en-US",
+            "organization_id": 360091290114,
+            "role": "admin",
+            "verified": true,
+            "external_id": null,
+            "tags": [],
+            "alias": null,
+            "active": true,
+            "shared": false,
+            "shared_agent": false,
+            "last_login_at": "2018-11-30T19:12:34Z",
+            "two_factor_auth_enabled": true,
+            "signature": null,
+            "details": null,
+            "notes": null,
+            "role_type": null,
+            "custom_role_id": null,
+            "moderator": true,
+            "ticket_restriction": null,
+            "only_private_comments": false,
+            "restricted_agent": false,
+            "suspended": false,
+            "chat_only": false,
+            "default_group_id": 360002440594,
+            "report_csv": true,
+            "user_fields": {}
+        }
+    ],
+    "next_page": null,
+    "previous_page": null,
+    "count": 1
+}

@@ -30,6 +30,21 @@ func TestGetUsers(t *testing.T) {
 	}
 }
 
+func TestGetUsersByGroupID(t *testing.T) {
+	mockAPI := newMockAPI(http.MethodGet, "users_by_group.json")
+	client := newTestClient(mockAPI)
+	defer mockAPI.Close()
+
+	users, _, err := client.GetUsersByGroupID(ctx, 360002440594, nil)
+	if err != nil {
+		t.Fatalf("Failed to get users: %s", err)
+	}
+
+	if len(users) != 1 {
+		t.Fatalf("expected length of users is 1, but got %d", len(users))
+	}
+}
+
 func TestGetOrganizationUsers(t *testing.T) {
 	mockAPI := newMockAPI(http.MethodGet, "users.json")
 	client := newTestClient(mockAPI)
