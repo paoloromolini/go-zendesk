@@ -2298,10 +2298,26 @@ func (m *Client) GetUsersOBP(ctx context.Context, opts *zendesk.OBPOptions) ([]z
 	return ret0, ret1, ret2
 }
 
+// GetUsersByGroupID mocks base method.
+func (m *Client) GetUsersByGroupID(arg0 context.Context, arg1 int64, arg2 *zendesk.UserListOptions) ([]zendesk.User, zendesk.Page, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetUsersByGroupID", arg0, arg1, arg2)
+	ret0, _ := ret[0].([]zendesk.User)
+	ret1, _ := ret[1].(zendesk.Page)
+	ret2, _ := ret[2].(error)
+	return ret0, ret1, ret2
+}
+
 // GetUsersOBP indicates an expected call of GetUsersOBP.
 func (mr *ClientMockRecorder) GetUsersOBP(ctx, opts any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUsersOBP", reflect.TypeOf((*Client)(nil).GetUsersOBP), ctx, opts)
+}
+
+// GetUsersByGroupID indicates an expected call of GetUsersByGroupID.
+func (mr *ClientMockRecorder) GetUsersByGroupID(arg0, arg1, arg2 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUsersByGroupID", reflect.TypeOf((*Client)(nil).GetUsersByGroupID), arg0, arg1, arg2)
 }
 
 // GetView mocks base method.
