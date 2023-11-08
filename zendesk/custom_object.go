@@ -33,7 +33,7 @@ type CustomObjectAPI interface {
 		ctx context.Context, customObjectKey string, opts *SearchCustomObjectRecordsOptions,
 	) ([]CustomObjectRecord, Page, error)
 	ListCustomObjectRecords(
-		ctx context.Context, customObjectKey string, opts *CustomObjectListOptions) ([]CustomObjectRecord, Page, error)
+		ctx context.Context, customObjectKey string, opts *CustomObjectListOptions) ([]CustomObjectRecord, CursorPaginationMeta, error)
 	ShowCustomObjectRecord(
 		ctx context.Context, customObjectKey string, customObjectRecordID string,
 	) (*CustomObjectRecord, error)
@@ -83,18 +83,18 @@ func (z *Client) CreateCustomObjectRecord(
 
 // CustomObjectListOptions custom object list options
 type CustomObjectListOptions struct {
-	PageOptions
+	CursorPagination
 	Ids         string `url:"filter[ids],omitempty"`
 	ExternalIds string `url:"filter[external_ids],omitempty"`
 }
 
 // ListCustomObjectRecords list objects
-// https://developer.zendesk.com/api-reference/custom-objects/custom_object_records/#list-custom-object-records
+// https://developer.zendesk.com/api-reference/custom-data/custom-objects/custom_object_records/#list-custom-object-records
 func (z *Client) ListCustomObjectRecords(
-	ctx context.Context, customObjectKey string, opts *CustomObjectListOptions) ([]CustomObjectRecord, Page, error) {
+	ctx context.Context, customObjectKey string, opts *CustomObjectListOptions) ([]CustomObjectRecord, CursorPaginationMeta, error) {
 	var result struct {
 		CustomObjectRecords []CustomObjectRecord `json:"custom_object_records"`
-		Page
+		Meta                CursorPaginationMeta `json:"meta"`
 	}
 	tmp := opts
 	if tmp == nil {
@@ -105,13 +105,13 @@ func (z *Client) ListCustomObjectRecords(
 	body, err := z.get(ctx, urlWithOptions)
 
 	if err != nil {
-		return nil, Page{}, err
+		return nil, result.Meta, err
 	}
 	err = json.Unmarshal(body, &result)
 	if err != nil {
-		return nil, Page{}, err
+		return nil, result.Meta, err
 	}
-	return result.CustomObjectRecords, result.Page, nil
+	return result.CustomObjectRecords, result.Meta, nil
 }
 
 // AutocompleteSearchCustomObjectRecords search for a custom object record by the name field
