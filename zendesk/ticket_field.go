@@ -150,3 +150,22 @@ func (z *Client) DeleteTicketField(ctx context.Context, ticketID int64) error {
 
 	return nil
 }
+
+// ListTicketFieldOptions returns a list of custom ticket field options for the given drop-down ticket field
+// ref https://developer.zendesk.com/api-reference/ticketing/tickets/ticket_fields/#list-ticket-field-options
+func (z *Client) ListTicketFieldOptions(ctx context.Context, customFieldId int64) ([]CustomFieldOption, error) {
+	var data struct {
+		CustomFieldOptions []CustomFieldOption `json:"custom_field_options"`
+	}
+
+	body, err := z.get(ctx, fmt.Sprintf("/ticket_fields/%d/options.json", customFieldId))
+	if err != nil {
+		return []CustomFieldOption{}, err
+	}
+
+	err = json.Unmarshal(body, &data)
+	if err != nil {
+		return []CustomFieldOption{}, err
+	}
+	return data.CustomFieldOptions, nil
+}
