@@ -39,6 +39,7 @@ type OrganizationAPI interface {
 	CreateOrganization(ctx context.Context, org Organization) (Organization, error)
 	GetOrganization(ctx context.Context, orgID int64) (Organization, error)
 	GetOrganizationByExternalID(ctx context.Context, externalID string) ([]Organization, Page, error)
+	AutocompleteOrganizations(ctx context.Context, name string) ([]Organization, Page, error)
 	UpdateOrganization(ctx context.Context, orgID int64, org Organization) (Organization, error)
 	DeleteOrganization(ctx context.Context, orgID int64) error
 }
@@ -157,6 +158,28 @@ func (z *Client) UpdateOrganization(ctx context.Context, orgID int64, org Organi
 	}
 
 	return result.Organization, err
+}
+
+// AutocompleteOrganizations returns an array of organizations whose name starts with the value specified
+// ref: https://developer.zendesk.com/api-reference/ticketing/organizations/organizations/#autocomplete-organizations
+func (z *Client) AutocompleteOrganizations(ctx context.Context, name string,
+) ([]Organization, Page, error) {
+	var result struct {
+		Organizations []Organization `json:"organizations"`
+		Page
+	}
+
+	body, err := z.get(ctx, fmt.Sprintf("/organizations/autocomplete?name=%s", name))
+	if err != nil {
+		return []Organization{}, Page{}, err
+	}
+
+	err = json.Unmarshal(body, &result)
+	if err != nil {
+		return []Organization{}, Page{}, err
+	}
+
+	return result.Organizations, result.Page, err
 }
 
 // DeleteOrganization deletes the specified organization
