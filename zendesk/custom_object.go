@@ -150,6 +150,9 @@ type SearchCustomObjectRecordsOptions struct {
 
 	// Query string
 	Query string `url:"query,omitempty"`
+
+	// ExternalID string
+	ExternalID string `url:"external_id,omitempty"`
 }
 
 // SearchCustomObjectRecords search for a custom object record by the name field
