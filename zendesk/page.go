@@ -12,8 +12,9 @@ type Page struct {
 //
 // ref: https://developer.zendesk.com/rest_api/docs/support/introduction#pagination
 type PageOptions struct {
-	PerPage int `url:"per_page,omitempty"`
-	Page    int `url:"page,omitempty"`
+	Name    string `url:"name,onitempty"`
+	PerPage int    `url:"per_page,omitempty"`
+	Page    int    `url:"page,omitempty"`
 }
 
 // HasPrev checks if the Page has previous page
