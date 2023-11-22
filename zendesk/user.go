@@ -123,6 +123,7 @@ type UserAPI interface {
 	CreateOrUpdateUser(ctx context.Context, user User) (User, error)
 	UpdateUser(ctx context.Context, userID int64, user User) (User, error)
 	GetUserRelated(ctx context.Context, userID int64) (UserRelated, error)
+	AutocompleteUsers(ctx context.Context, opts *UserListOptions) ([]User, Page, error)
 }
 
 // GetUsers fetch user list
@@ -379,4 +380,24 @@ func (z *Client) GetUserRelated(ctx context.Context, userID int64) (UserRelated,
 	}
 
 	return data.UserRelated, nil
+}
+
+// AutocompleteUsers returns an array of users whose name starts with the value specified in the name parameter
+// ref: https://developer.zendesk.com/api-reference/ticketing/users/users/#autocomplete-users
+func (z *Client) AutocompleteUsers(ctx context.Context, opts *UserListOptions) ([]User, Page, error) {
+	var result struct {
+		Users []User `json:"users"`
+		Page
+	}
+
+	body, err := z.get(ctx, fmt.Sprintf("/users/autocomplete?name=%s&per_page=%d&page=%d", opts.Name, opts.PerPage, opts.Page))
+	if err != nil {
+		return []User{}, Page{}, err
+	}
+
+	err = json.Unmarshal(body, &result)
+	if err != nil {
+		return []User{}, Page{}, err
+	}
+	return result.Users, result.Page, err
 }
