@@ -12,7 +12,7 @@ type Page struct {
 //
 // ref: https://developer.zendesk.com/rest_api/docs/support/introduction#pagination
 type PageOptions struct {
-	Name    string `url:"name,onitempty"`
+	Name    string `url:"name,omitempty"`
 	PerPage int    `url:"per_page,omitempty"`
 	Page    int    `url:"page,omitempty"`
 }
