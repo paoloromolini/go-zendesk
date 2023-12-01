@@ -31,7 +31,7 @@ type CustomObjectAPI interface {
 	) ([]CustomObjectRecord, Page, error)
 	SearchCustomObjectRecords(
 		ctx context.Context, customObjectKey string, opts *SearchCustomObjectRecordsOptions,
-	) ([]CustomObjectRecord, Page, error)
+	) ([]CustomObjectRecord, CursorPaginationMeta, error)
 	ListCustomObjectRecords(
 		ctx context.Context, customObjectKey string, opts *CustomObjectListOptions) ([]CustomObjectRecord, CursorPaginationMeta, error)
 	ShowCustomObjectRecord(
@@ -136,7 +136,7 @@ func (z *Client) AutocompleteSearchCustomObjectRecords(
 }
 
 type SearchCustomObjectRecordsOptions struct {
-	PageOptions
+	CursorPagination
 
 	// One of name, created_at, updated_at, -name, -created_at, or -updated_at.
 	// The - denotes the sort will be descending. Defaults to sorting by relevance.
@@ -153,10 +153,10 @@ type SearchCustomObjectRecordsOptions struct {
 // https://developer.zendesk.com/api-reference/custom-objects/custom_object_records/#search-custom-object-records
 func (z *Client) SearchCustomObjectRecords(
 	ctx context.Context, customObjectKey string, opts *SearchCustomObjectRecordsOptions,
-) ([]CustomObjectRecord, Page, error) {
+) ([]CustomObjectRecord, CursorPaginationMeta, error) {
 	var result struct {
 		CustomObjectRecords []CustomObjectRecord `json:"custom_object_records"`
-		Page
+		Meta                CursorPaginationMeta `json:"meta"`
 	}
 	tmp := opts
 	if tmp == nil {
@@ -167,13 +167,13 @@ func (z *Client) SearchCustomObjectRecords(
 	body, err := z.get(ctx, urlWithOptions)
 
 	if err != nil {
-		return nil, Page{}, err
+		return nil, result.Meta, err
 	}
 	err = json.Unmarshal(body, &result)
 	if err != nil {
-		return nil, Page{}, err
+		return nil, result.Meta, err
 	}
-	return result.CustomObjectRecords, result.Page, nil
+	return result.CustomObjectRecords, result.Meta, nil
 }
 
 // ShowCustomObjectRecord returns a custom record for a specific object using a provided id.
