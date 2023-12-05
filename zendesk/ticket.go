@@ -135,6 +135,9 @@ type Via struct {
 type TicketListOptions struct {
 	PageOptions
 
+	// ExternalID is the external ID that can be used to look up a ticket
+	ExternalID string `url:"external_id,omitempty"`
+
 	// SortBy can take "assignee", "assignee.name", "created_at", "group", "id",
 	// "locale", "requester", "requester.name", "status", "subject", "updated_at"
 	SortBy string `url:"sort_by,omitempty"`
