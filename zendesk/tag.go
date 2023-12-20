@@ -18,6 +18,7 @@ type TagAPI interface {
 	AddOrganizationTags(ctx context.Context, organizationID int64, tags []Tag) ([]Tag, error)
 	AddUserTags(ctx context.Context, userID int64, tags []Tag) ([]Tag, error)
 	RemoveTicketTags(ctx context.Context, ticketID int64, tags []Tag) error
+	RemoveUserTags(ctx context.Context, userID int64, tags []Tag) error
 }
 
 // GetTicketTags get ticket tag list
@@ -156,4 +157,16 @@ func (z *Client) RemoveTicketTags(ctx context.Context, ticketID int64, tags []Ta
 	data.Tags = tags
 
 	return z.delete(ctx, fmt.Sprintf("/tickets/%d/tags?tags=%v", ticketID, tags))
+}
+
+// RemoveUserTags remove tags from user
+//
+// ref: https://developer.zendesk.com/api-reference/ticketing/ticket-management/tags/#remove-tags
+func (z *Client) RemoveUserTags(ctx context.Context, userID int64, tags []Tag) error {
+	var data struct {
+		Tags []Tag `json:"tags"`
+	}
+	data.Tags = tags
+
+	return z.delete(ctx, fmt.Sprintf("/users/%d/tags?tags=%v", userID, tags))
 }
