@@ -363,6 +363,27 @@ func (z *Client) UpdateUser(ctx context.Context, userID int64, user User) (User,
 	return result.User, nil
 }
 
+// UpdateSuspendedUser update a suspended user
+func (z *Client) UpdateSuspendedUser(ctx context.Context, userID int64, suspended bool) (bool, error) {
+	var data struct {
+		User struct {
+			Suspended bool `json:"suspended"`
+		} `json:"user"`
+	}
+	data.User.Suspended = suspended
+
+	body, err := z.put(ctx, fmt.Sprintf("/users/%d.json", userID), data)
+	if err != nil {
+		return false, err
+	}
+
+	err = json.Unmarshal(body, &data)
+	if err != nil {
+		return false, err
+	}
+	return data.User.Suspended, nil
+}
+
 // GetUserRelated retrieves user related user information
 // ref: https://developer.zendesk.com/api-reference/ticketing/users/users/#show-user-related-information
 func (z *Client) GetUserRelated(ctx context.Context, userID int64) (UserRelated, error) {
