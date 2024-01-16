@@ -276,7 +276,7 @@ func (z *Client) delete(ctx context.Context, path string) error {
 		return err
 	}
 
-	if resp.StatusCode != http.StatusOK {
+	if !(resp.StatusCode == http.StatusOK || resp.StatusCode == http.StatusNoContent) {
 		return Error{
 			body: body,
 			resp: resp,
