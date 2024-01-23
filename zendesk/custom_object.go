@@ -20,6 +20,23 @@ type CustomObjectRecord struct {
 	ExternalID         string                 `json:"external_id,omitempty"`
 }
 
+type CustomObjectField struct {
+	Active              bool        `json:"active"`
+	CreatedAt           time.Time   `json:"created_at"`
+	Description         string      `json:"description"`
+	ID                  int64       `json:"id"`
+	Key                 string      `json:"key"`
+	Position            int         `json:"position"`
+	RawDescription      string      `json:"raw_description"`
+	RawTitle            string      `json:"raw_title"`
+	RegexpForValidation interface{} `json:"regexp_for_validation"`
+	System              bool        `json:"system"`
+	Title               string      `json:"title"`
+	Type                string      `json:"type"`
+	UpdatedAt           time.Time   `json:"updated_at"`
+	URL                 string      `json:"url"`
+}
+
 // CustomObjectAPI an interface containing all custom object related methods
 type CustomObjectAPI interface {
 	CreateCustomObjectRecord(
@@ -52,6 +69,10 @@ type CustomObjectAPI interface {
 		ctx context.Context,
 		record CustomObjectRecord,
 	) error
+	ListCustomObjectFields(
+		ctx context.Context,
+		customObjectKey string,
+	) ([]CustomObjectField, error)
 }
 
 // CreateCustomObjectRecord CreateCustomObject create a custom object record
@@ -267,4 +288,28 @@ func (z *Client) DeleteCustomObjectRecord(
 		return err
 	}
 	return nil
+}
+
+// ListCustomObjectFields Lists all undeleted custom fields for the specified object.
+// https://developer.zendesk.com/api-reference/custom-data/custom-objects/custom_object_fields/#list-custom-object-fields
+func (z *Client) ListCustomObjectFields(
+	ctx context.Context,
+	customObjectKey string) ([]CustomObjectField, error) {
+
+	var result struct {
+		CustomObjectFields []CustomObjectField `json:"custom_object_fields"`
+	}
+
+	url := fmt.Sprintf("/custom_objects/%s/fields", customObjectKey)
+	body, err := z.get(ctx, url)
+
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(body, &result)
+
+	if err != nil {
+		return nil, err
+	}
+	return result.CustomObjectFields, nil
 }
