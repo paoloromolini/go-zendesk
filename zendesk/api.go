@@ -34,6 +34,7 @@ type API interface {
 	ViewAPI
 	WebhookAPI
 	CustomObjectAPI
+	CustomStatusAPI
 }
 
 var _ API = (*Client)(nil)

@@ -5,6 +5,7 @@
 //
 //	mockgen -source=api.go -destination=mock/client.go -package=mock -mock_names=API=Client github.com/nukosuke/go-zendesk/zendesk API
 //
+
 // Package mock is a generated GoMock package.
 package mock
 
@@ -84,8 +85,24 @@ func (mr *ClientMockRecorder) AddUserTags(ctx, userID, tags any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddUserTags", reflect.TypeOf((*Client)(nil).AddUserTags), ctx, userID, tags)
 }
 
+// AutocompleteOrganizations mocks base method.
+func (m *Client) AutocompleteOrganizations(ctx context.Context, opts *zendesk.OrganizationListOptions) ([]zendesk.Organization, zendesk.Page, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "AutocompleteOrganizations", ctx, opts)
+	ret0, _ := ret[0].([]zendesk.Organization)
+	ret1, _ := ret[1].(zendesk.Page)
+	ret2, _ := ret[2].(error)
+	return ret0, ret1, ret2
+}
+
+// AutocompleteOrganizations indicates an expected call of AutocompleteOrganizations.
+func (mr *ClientMockRecorder) AutocompleteOrganizations(ctx, opts any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AutocompleteOrganizations", reflect.TypeOf((*Client)(nil).AutocompleteOrganizations), ctx, opts)
+}
+
 // AutocompleteSearchCustomObjectRecords mocks base method.
-func (m *Client) AutocompleteSearchCustomObjectRecords(ctx context.Context, customObjectKey string, opts *zendesk.CustomObjectAutocompleteOptions) ([]zendesk.CustomObjectRecord, zendesk.Page, error) {
+func (m *Client) AutocompleteSearchCustomObjectRecords(ctx context.Context, customObjectKey string, opts *zendesk.PageOptions) ([]zendesk.CustomObjectRecord, zendesk.Page, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "AutocompleteSearchCustomObjectRecords", ctx, customObjectKey, opts)
 	ret0, _ := ret[0].([]zendesk.CustomObjectRecord)
@@ -98,6 +115,22 @@ func (m *Client) AutocompleteSearchCustomObjectRecords(ctx context.Context, cust
 func (mr *ClientMockRecorder) AutocompleteSearchCustomObjectRecords(ctx, customObjectKey, opts any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AutocompleteSearchCustomObjectRecords", reflect.TypeOf((*Client)(nil).AutocompleteSearchCustomObjectRecords), ctx, customObjectKey, opts)
+}
+
+// AutocompleteUsers mocks base method.
+func (m *Client) AutocompleteUsers(ctx context.Context, opts *zendesk.UserListOptions) ([]zendesk.User, zendesk.Page, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "AutocompleteUsers", ctx, opts)
+	ret0, _ := ret[0].([]zendesk.User)
+	ret1, _ := ret[1].(zendesk.Page)
+	ret2, _ := ret[2].(error)
+	return ret0, ret1, ret2
+}
+
+// AutocompleteUsers indicates an expected call of AutocompleteUsers.
+func (mr *ClientMockRecorder) AutocompleteUsers(ctx, opts any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AutocompleteUsers", reflect.TypeOf((*Client)(nil).AutocompleteUsers), ctx, opts)
 }
 
 // CreateAutomation mocks base method.
@@ -443,17 +476,17 @@ func (mr *ClientMockRecorder) DeleteBrand(ctx, brandID any) *gomock.Call {
 }
 
 // DeleteCustomObjectRecord mocks base method.
-func (m *Client) DeleteCustomObjectRecord(arg0 context.Context, arg1 zendesk.CustomObjectRecord) error {
+func (m *Client) DeleteCustomObjectRecord(ctx context.Context, record zendesk.CustomObjectRecord) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "DeleteCustomObjectRecord", arg0, arg1)
+	ret := m.ctrl.Call(m, "DeleteCustomObjectRecord", ctx, record)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // DeleteCustomObjectRecord indicates an expected call of DeleteCustomObjectRecord.
-func (mr *ClientMockRecorder) DeleteCustomObjectRecord(arg0, arg1 interface{}) *gomock.Call {
+func (mr *ClientMockRecorder) DeleteCustomObjectRecord(ctx, record any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteCustomObjectRecord", reflect.TypeOf((*Client)(nil).DeleteCustomObjectRecord), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteCustomObjectRecord", reflect.TypeOf((*Client)(nil).DeleteCustomObjectRecord), ctx, record)
 }
 
 // DeleteDynamicContentItem mocks base method.
@@ -717,18 +750,18 @@ func (mr *ClientMockRecorder) GetBrand(ctx, brandID any) *gomock.Call {
 }
 
 // GetCountTicketsInViews mocks base method.
-func (m *Client) GetCountTicketsInViews(arg0 context.Context, arg1 []string) ([]zendesk.ViewCount, error) {
+func (m *Client) GetCountTicketsInViews(ctx context.Context, ids []string) ([]zendesk.ViewCount, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetCountTicketsInViews", arg0, arg1)
+	ret := m.ctrl.Call(m, "GetCountTicketsInViews", ctx, ids)
 	ret0, _ := ret[0].([]zendesk.ViewCount)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetCountTicketsInViews indicates an expected call of GetCountTicketsInViews.
-func (mr *ClientMockRecorder) GetCountTicketsInViews(arg0, arg1 interface{}) *gomock.Call {
+func (mr *ClientMockRecorder) GetCountTicketsInViews(ctx, ids any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCountTicketsInViews", reflect.TypeOf((*Client)(nil).GetCountTicketsInViews), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCountTicketsInViews", reflect.TypeOf((*Client)(nil).GetCountTicketsInViews), ctx, ids)
 }
 
 // GetCustomRoles mocks base method.
@@ -1151,9 +1184,9 @@ func (mr *ClientMockRecorder) GetSLAPolicy(ctx, id any) *gomock.Call {
 }
 
 // GetSourcesByTarget mocks base method.
-func (m *Client) GetSourcesByTarget(arg0 context.Context, arg1, arg2, arg3, arg4 string, arg5 *zendesk.PageOptions) ([]zendesk.CustomObjectRecord, zendesk.Page, error) {
+func (m *Client) GetSourcesByTarget(ctx context.Context, fieldID, sourceType, targetID, targetType string, opts *zendesk.PageOptions) ([]zendesk.CustomObjectRecord, zendesk.Page, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetSourcesByTarget", arg0, arg1, arg2, arg3, arg4, arg5)
+	ret := m.ctrl.Call(m, "GetSourcesByTarget", ctx, fieldID, sourceType, targetID, targetType, opts)
 	ret0, _ := ret[0].([]zendesk.CustomObjectRecord)
 	ret1, _ := ret[1].(zendesk.Page)
 	ret2, _ := ret[2].(error)
@@ -1161,9 +1194,9 @@ func (m *Client) GetSourcesByTarget(arg0 context.Context, arg1, arg2, arg3, arg4
 }
 
 // GetSourcesByTarget indicates an expected call of GetSourcesByTarget.
-func (mr *ClientMockRecorder) GetSourcesByTarget(arg0, arg1, arg2, arg3, arg4, arg5 interface{}) *gomock.Call {
+func (mr *ClientMockRecorder) GetSourcesByTarget(ctx, fieldID, sourceType, targetID, targetType, opts any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSourcesByTarget", reflect.TypeOf((*Client)(nil).GetSourcesByTarget), arg0, arg1, arg2, arg3, arg4, arg5)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSourcesByTarget", reflect.TypeOf((*Client)(nil).GetSourcesByTarget), ctx, fieldID, sourceType, targetID, targetType, opts)
 }
 
 // GetTarget mocks base method.
@@ -1507,9 +1540,9 @@ func (mr *ClientMockRecorder) GetUsers(ctx, opts any) *gomock.Call {
 }
 
 // GetUsersByGroupID mocks base method.
-func (m *Client) GetUsersByGroupID(arg0 context.Context, arg1 int64, arg2 *zendesk.UserListOptions) ([]zendesk.User, zendesk.Page, error) {
+func (m *Client) GetUsersByGroupID(ctx context.Context, groupID int64, opts *zendesk.UserListOptions) ([]zendesk.User, zendesk.Page, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetUsersByGroupID", arg0, arg1, arg2)
+	ret := m.ctrl.Call(m, "GetUsersByGroupID", ctx, groupID, opts)
 	ret0, _ := ret[0].([]zendesk.User)
 	ret1, _ := ret[1].(zendesk.Page)
 	ret2, _ := ret[2].(error)
@@ -1517,9 +1550,9 @@ func (m *Client) GetUsersByGroupID(arg0 context.Context, arg1 int64, arg2 *zende
 }
 
 // GetUsersByGroupID indicates an expected call of GetUsersByGroupID.
-func (mr *ClientMockRecorder) GetUsersByGroupID(arg0, arg1, arg2 interface{}) *gomock.Call {
+func (mr *ClientMockRecorder) GetUsersByGroupID(ctx, groupID, opts any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUsersByGroupID", reflect.TypeOf((*Client)(nil).GetUsersByGroupID), arg0, arg1, arg2)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUsersByGroupID", reflect.TypeOf((*Client)(nil).GetUsersByGroupID), ctx, groupID, opts)
 }
 
 // GetView mocks base method.
@@ -1583,12 +1616,27 @@ func (mr *ClientMockRecorder) GetWebhookSigningSecret(ctx, webhookID any) *gomoc
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetWebhookSigningSecret", reflect.TypeOf((*Client)(nil).GetWebhookSigningSecret), ctx, webhookID)
 }
 
+// ListCustomObjectFields mocks base method.
+func (m *Client) ListCustomObjectFields(ctx context.Context, customObjectKey string) ([]zendesk.CustomObjectField, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListCustomObjectFields", ctx, customObjectKey)
+	ret0, _ := ret[0].([]zendesk.CustomObjectField)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListCustomObjectFields indicates an expected call of ListCustomObjectFields.
+func (mr *ClientMockRecorder) ListCustomObjectFields(ctx, customObjectKey any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListCustomObjectFields", reflect.TypeOf((*Client)(nil).ListCustomObjectFields), ctx, customObjectKey)
+}
+
 // ListCustomObjectRecords mocks base method.
-func (m *Client) ListCustomObjectRecords(ctx context.Context, customObjectKey string, opts *zendesk.CustomObjectListOptions) ([]zendesk.CustomObjectRecord, zendesk.Page, error) {
+func (m *Client) ListCustomObjectRecords(ctx context.Context, customObjectKey string, opts *zendesk.CustomObjectListOptions) ([]zendesk.CustomObjectRecord, zendesk.CursorPaginationMeta, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListCustomObjectRecords", ctx, customObjectKey, opts)
 	ret0, _ := ret[0].([]zendesk.CustomObjectRecord)
-	ret1, _ := ret[1].(zendesk.Page)
+	ret1, _ := ret[1].(zendesk.CursorPaginationMeta)
 	ret2, _ := ret[2].(error)
 	return ret0, ret1, ret2
 }
@@ -1597,6 +1645,21 @@ func (m *Client) ListCustomObjectRecords(ctx context.Context, customObjectKey st
 func (mr *ClientMockRecorder) ListCustomObjectRecords(ctx, customObjectKey, opts any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListCustomObjectRecords", reflect.TypeOf((*Client)(nil).ListCustomObjectRecords), ctx, customObjectKey, opts)
+}
+
+// ListCustomTicketStatuses mocks base method.
+func (m *Client) ListCustomTicketStatuses(ctx context.Context, opts *zendesk.CustomTicketStatusOptions) ([]zendesk.CustomStatus, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListCustomTicketStatuses", ctx, opts)
+	ret0, _ := ret[0].([]zendesk.CustomStatus)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListCustomTicketStatuses indicates an expected call of ListCustomTicketStatuses.
+func (mr *ClientMockRecorder) ListCustomTicketStatuses(ctx, opts any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListCustomTicketStatuses", reflect.TypeOf((*Client)(nil).ListCustomTicketStatuses), ctx, opts)
 }
 
 // ListInstallations mocks base method.
@@ -1673,6 +1736,34 @@ func (mr *ClientMockRecorder) Put(ctx, path, data any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Put", reflect.TypeOf((*Client)(nil).Put), ctx, path, data)
 }
 
+// RemoveTicketTags mocks base method.
+func (m *Client) RemoveTicketTags(ctx context.Context, ticketID int64, tags []zendesk.Tag) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "RemoveTicketTags", ctx, ticketID, tags)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// RemoveTicketTags indicates an expected call of RemoveTicketTags.
+func (mr *ClientMockRecorder) RemoveTicketTags(ctx, ticketID, tags any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveTicketTags", reflect.TypeOf((*Client)(nil).RemoveTicketTags), ctx, ticketID, tags)
+}
+
+// RemoveUserTags mocks base method.
+func (m *Client) RemoveUserTags(ctx context.Context, userID int64, tags []zendesk.Tag) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "RemoveUserTags", ctx, userID, tags)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// RemoveUserTags indicates an expected call of RemoveUserTags.
+func (mr *ClientMockRecorder) RemoveUserTags(ctx, userID, tags any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveUserTags", reflect.TypeOf((*Client)(nil).RemoveUserTags), ctx, userID, tags)
+}
+
 // Search mocks base method.
 func (m *Client) Search(ctx context.Context, opts *zendesk.SearchOptions) (zendesk.SearchResults, zendesk.Page, error) {
 	m.ctrl.T.Helper()
@@ -1705,11 +1796,11 @@ func (mr *ClientMockRecorder) SearchCount(ctx, opts any) *gomock.Call {
 }
 
 // SearchCustomObjectRecords mocks base method.
-func (m *Client) SearchCustomObjectRecords(ctx context.Context, customObjectKey string, opts *zendesk.SearchCustomObjectRecordsOptions) ([]zendesk.CustomObjectRecord, zendesk.Page, error) {
+func (m *Client) SearchCustomObjectRecords(ctx context.Context, customObjectKey string, opts *zendesk.SearchCustomObjectRecordsOptions) ([]zendesk.CustomObjectRecord, zendesk.CursorPaginationMeta, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SearchCustomObjectRecords", ctx, customObjectKey, opts)
 	ret0, _ := ret[0].([]zendesk.CustomObjectRecord)
-	ret1, _ := ret[1].(zendesk.Page)
+	ret1, _ := ret[1].(zendesk.CursorPaginationMeta)
 	ret2, _ := ret[2].(error)
 	return ret0, ret1, ret2
 }
@@ -1764,6 +1855,21 @@ func (m *Client) ShowCustomObjectRecord(ctx context.Context, customObjectKey, cu
 func (mr *ClientMockRecorder) ShowCustomObjectRecord(ctx, customObjectKey, customObjectRecordID any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ShowCustomObjectRecord", reflect.TypeOf((*Client)(nil).ShowCustomObjectRecord), ctx, customObjectKey, customObjectRecordID)
+}
+
+// ShowCustomTicketStatus mocks base method.
+func (m *Client) ShowCustomTicketStatus(ctx context.Context, customStatusID int64) (*zendesk.CustomStatus, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ShowCustomTicketStatus", ctx, customStatusID)
+	ret0, _ := ret[0].(*zendesk.CustomStatus)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ShowCustomTicketStatus indicates an expected call of ShowCustomTicketStatus.
+func (mr *ClientMockRecorder) ShowCustomTicketStatus(ctx, customStatusID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ShowCustomTicketStatus", reflect.TypeOf((*Client)(nil).ShowCustomTicketStatus), ctx, customStatusID)
 }
 
 // UpdateAutomation mocks base method.
