@@ -44,8 +44,8 @@ type CustomObjectAPI interface {
 	AutocompleteSearchCustomObjectRecords(
 		ctx context.Context,
 		customObjectKey string,
-		opts *PageOptions,
-	) ([]CustomObjectRecord, Page, error)
+		opts *AutocompleteSearchCustomObjectRecordsOptions,
+	) ([]CustomObjectRecord, CursorPaginationMeta, error)
 	SearchCustomObjectRecords(
 		ctx context.Context, customObjectKey string, opts *SearchCustomObjectRecordsOptions,
 	) ([]CustomObjectRecord, CursorPaginationMeta, error)
@@ -103,6 +103,12 @@ type CustomObjectListOptions struct {
 	ExternalIds string `url:"filter[external_ids],omitempty"`
 }
 
+// AutocompleteSearchCustomObjectRecordsOptions custom object search
+type AutocompleteSearchCustomObjectRecordsOptions struct {
+	Name string `url:"name,omitempty"`
+	CursorPagination
+}
+
 // ListCustomObjectRecords list objects
 // https://developer.zendesk.com/api-reference/custom-data/custom-objects/custom_object_records/#list-custom-object-records
 func (z *Client) ListCustomObjectRecords(
@@ -132,28 +138,28 @@ func (z *Client) ListCustomObjectRecords(
 // AutocompleteSearchCustomObjectRecords search for a custom object record by the name field
 // https://developer.zendesk.com/api-reference/custom-objects/custom_object_records/#autocomplete-custom-object-record-search
 func (z *Client) AutocompleteSearchCustomObjectRecords(
-	ctx context.Context, customObjectKey string, opts *PageOptions,
-) ([]CustomObjectRecord, Page, error) {
+	ctx context.Context, customObjectKey string, opts *AutocompleteSearchCustomObjectRecordsOptions,
+) ([]CustomObjectRecord, CursorPaginationMeta, error) {
 	var result struct {
 		CustomObjectRecords []CustomObjectRecord `json:"custom_object_records"`
-		Page
+		Meta                CursorPaginationMeta `json:"meta"`
 	}
 	tmp := opts
 	if tmp == nil {
-		tmp = &PageOptions{}
+		tmp = &AutocompleteSearchCustomObjectRecordsOptions{}
 	}
 	url := fmt.Sprintf("/custom_objects/%s/records/autocomplete", customObjectKey)
 	urlWithOptions, err := addOptions(url, tmp)
 	body, err := z.get(ctx, urlWithOptions)
 
 	if err != nil {
-		return nil, Page{}, err
+		return nil, CursorPaginationMeta{}, err
 	}
 	err = json.Unmarshal(body, &result)
 	if err != nil {
-		return nil, Page{}, err
+		return nil, CursorPaginationMeta{}, err
 	}
-	return result.CustomObjectRecords, result.Page, nil
+	return result.CustomObjectRecords, result.Meta, nil
 }
 
 type SearchCustomObjectRecordsOptions struct {
