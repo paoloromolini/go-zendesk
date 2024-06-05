@@ -111,6 +111,18 @@ type SearchUsersOptions struct {
 	Query       string `json:"query,omitempty" url:"query,omitempty"`
 }
 
+// Identity represents the User Identity like phone or email
+type Identity struct {
+	CreatedAt time.Time `json:"created_at"`
+	ID        int64     `json:"id"`
+	Primary   bool      `json:"primary"`
+	Type      string    `json:"type"`
+	UpdatedAt time.Time `json:"updated_at"`
+	UserID    int64     `json:"user_id"`
+	Value     string    `json:"value"`
+	Verified  bool      `json:"verified"`
+}
+
 // UserAPI an interface containing all user related methods
 type UserAPI interface {
 	SearchUsers(ctx context.Context, opts *SearchUsersOptions) ([]User, Page, error)
@@ -124,6 +136,8 @@ type UserAPI interface {
 	UpdateUser(ctx context.Context, userID int64, user User) (User, error)
 	GetUserRelated(ctx context.Context, userID int64) (UserRelated, error)
 	AutocompleteUsers(ctx context.Context, opts *UserListOptions) ([]User, Page, error)
+	ListUserIdentities(ctx context.Context, userID int64) ([]Identity, error)
+	MakeUserIdentityPrimary(ctx context.Context, userID int64, userIdentityID int64) ([]Identity, error)
 }
 
 // GetUsers fetch user list
@@ -421,4 +435,41 @@ func (z *Client) AutocompleteUsers(ctx context.Context, opts *UserListOptions) (
 		return []User{}, Page{}, err
 	}
 	return result.Users, result.Page, err
+}
+
+// ListUserIdentities returns an array of user identity
+// https://developer.zendesk.com/api-reference/ticketing/users/user_identities/#list-identities
+func (z *Client) ListUserIdentities(ctx context.Context, userID int64) ([]Identity, error) {
+	var result struct {
+		Identities []Identity `json:"identities"`
+	}
+	body, err := z.get(ctx, fmt.Sprintf("/users/%d/identities", userID))
+
+	if err != nil {
+		return []Identity{}, err
+	}
+	err = json.Unmarshal(body, &result)
+	if err != nil {
+		return []Identity{}, err
+	}
+	return result.Identities, err
+
+}
+
+// MakeUserIdentityPrimary make a user identity as primary
+// https://developer.zendesk.com/api-reference/ticketing/users/user_identities/#make-identity-primary
+func (z *Client) MakeUserIdentityPrimary(ctx context.Context, userID int64, userIdentityID int64) ([]Identity, error) {
+	var result struct {
+		Identities []Identity `json:"identities"`
+	}
+	body, err := z.put(ctx, fmt.Sprintf("/users/%d/identities/%d/make_primary", userID, userIdentityID), nil)
+
+	if err != nil {
+		return []Identity{}, err
+	}
+	err = json.Unmarshal(body, &result)
+	if err != nil {
+		return []Identity{}, err
+	}
+	return result.Identities, err
 }

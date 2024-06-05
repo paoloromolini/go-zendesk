@@ -102,11 +102,11 @@ func (mr *ClientMockRecorder) AutocompleteOrganizations(ctx, opts any) *gomock.C
 }
 
 // AutocompleteSearchCustomObjectRecords mocks base method.
-func (m *Client) AutocompleteSearchCustomObjectRecords(ctx context.Context, customObjectKey string, opts *zendesk.PageOptions) ([]zendesk.CustomObjectRecord, zendesk.Page, error) {
+func (m *Client) AutocompleteSearchCustomObjectRecords(ctx context.Context, customObjectKey string, opts *zendesk.AutocompleteSearchCustomObjectRecordsOptions) ([]zendesk.CustomObjectRecord, zendesk.CursorPaginationMeta, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "AutocompleteSearchCustomObjectRecords", ctx, customObjectKey, opts)
 	ret0, _ := ret[0].([]zendesk.CustomObjectRecord)
-	ret1, _ := ret[1].(zendesk.Page)
+	ret1, _ := ret[1].(zendesk.CursorPaginationMeta)
 	ret2, _ := ret[2].(error)
 	return ret0, ret1, ret2
 }
@@ -1692,6 +1692,21 @@ func (mr *ClientMockRecorder) ListTicketComments(ctx, ticketID, opts any) *gomoc
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListTicketComments", reflect.TypeOf((*Client)(nil).ListTicketComments), ctx, ticketID, opts)
 }
 
+// ListUserIdentities mocks base method.
+func (m *Client) ListUserIdentities(ctx context.Context, userID int64) ([]zendesk.Identity, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListUserIdentities", ctx, userID)
+	ret0, _ := ret[0].([]zendesk.Identity)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListUserIdentities indicates an expected call of ListUserIdentities.
+func (mr *ClientMockRecorder) ListUserIdentities(ctx, userID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListUserIdentities", reflect.TypeOf((*Client)(nil).ListUserIdentities), ctx, userID)
+}
+
 // MakeCommentPrivate mocks base method.
 func (m *Client) MakeCommentPrivate(ctx context.Context, ticketID, ticketCommentID int64) error {
 	m.ctrl.T.Helper()
@@ -1704,6 +1719,21 @@ func (m *Client) MakeCommentPrivate(ctx context.Context, ticketID, ticketComment
 func (mr *ClientMockRecorder) MakeCommentPrivate(ctx, ticketID, ticketCommentID any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MakeCommentPrivate", reflect.TypeOf((*Client)(nil).MakeCommentPrivate), ctx, ticketID, ticketCommentID)
+}
+
+// MakeUserIdentityPrimary mocks base method.
+func (m *Client) MakeUserIdentityPrimary(ctx context.Context, userID, userIdentityID int64) ([]zendesk.Identity, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "MakeUserIdentityPrimary", ctx, userID, userIdentityID)
+	ret0, _ := ret[0].([]zendesk.Identity)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// MakeUserIdentityPrimary indicates an expected call of MakeUserIdentityPrimary.
+func (mr *ClientMockRecorder) MakeUserIdentityPrimary(ctx, userID, userIdentityID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MakeUserIdentityPrimary", reflect.TypeOf((*Client)(nil).MakeUserIdentityPrimary), ctx, userID, userIdentityID)
 }
 
 // Post mocks base method.
