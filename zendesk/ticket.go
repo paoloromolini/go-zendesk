@@ -108,7 +108,18 @@ type Ticket struct {
 	UpdatedStamp *time.Time `json:"updated_stamp,omitempty"`
 	SafeUpdate   bool       `json:"safe_update,omitempty"`
 
+	Slas *Slas `json:"slas,omitempty"`
+
 	// TODO: TicketAudit (POST only) #126
+}
+
+type Slas struct {
+	PolicyMetrics []struct {
+		BreachAt time.Time `json:"breach_at"`
+		Stage    string    `json:"stage"`
+		Metric   string    `json:"metric"`
+		Days     int       `json:"days"`
+	} `json:"policy_metrics"`
 }
 
 // Requester is the struct that can be passed to create a new requester on ticket creation
@@ -134,6 +145,8 @@ type Via struct {
 // SortBy specifies the field to sort by, and SortOrder specifies the order (either 'asc' or 'desc').
 type TicketListOptions struct {
 	PageOptions
+
+	Include string `url:"include,omitempty"`
 
 	// ExternalID is the external ID that can be used to look up a ticket
 	ExternalID string `url:"external_id,omitempty"`
