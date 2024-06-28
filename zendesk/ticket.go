@@ -140,6 +140,12 @@ type Via struct {
 	} `json:"source"`
 }
 
+// TicketOptions struct is used to specify options for a ticket
+type TicketOptions struct {
+	Include string `url:"include,omitempty"`
+	ID      int64  `url:"id"`
+}
+
 // TicketListOptions struct is used to specify options for listing tickets in OBP (Offset Based Pagination).
 // It embeds the PageOptions struct for pagination and provides options for sorting the result;
 // SortBy specifies the field to sort by, and SortOrder specifies the order (either 'asc' or 'desc').
@@ -176,6 +182,7 @@ type TicketAPI interface {
 	GetOrganizationTicketsCBP(ctx context.Context, opts *CBPOptions) ([]Ticket, CursorPaginationMeta, error)
 	GetOrganizationTicketsIterator(ctx context.Context, organizationID int64, opts *PaginationOptions) *Iterator[Ticket]
 	GetTicket(ctx context.Context, id int64) (Ticket, error)
+	GetTicketOPT(ctx context.Context, opts *TicketOptions) (Ticket, error)
 	GetMultipleTickets(ctx context.Context, ticketIDs []int64) ([]Ticket, error)
 	CreateTicket(ctx context.Context, ticket Ticket) (Ticket, error)
 	UpdateTicket(ctx context.Context, ticketID int64, ticket Ticket) (Ticket, error)
@@ -390,6 +397,33 @@ func (z *Client) GetTicket(ctx context.Context, ticketID int64) (Ticket, error) 
 	}
 
 	err = json.Unmarshal(body, &result)
+	if err != nil {
+		return Ticket{}, err
+	}
+
+	return result.Ticket, err
+}
+
+// GetTicketOPT gets a specified ticket with options
+//
+// ref: https://developer.zendesk.com/rest_api/docs/support/tickets#show-ticket
+func (z *Client) GetTicketOPT(ctx context.Context, opts *TicketOptions) (Ticket, error) {
+	var result struct {
+		Ticket Ticket `json:"ticket"`
+	}
+
+	tmp := opts
+	if tmp == nil {
+		tmp = &TicketOptions{}
+	}
+
+	path := fmt.Sprintf("/tickets/%d.json", opts.ID)
+	u, err := addOptions(path, tmp)
+	if err != nil {
+		return Ticket{}, err
+	}
+
+	err = getData(z, ctx, u, &result)
 	if err != nil {
 		return Ticket{}, err
 	}
