@@ -176,6 +176,7 @@ type TicketAPI interface {
 	GetTicketsIterator(ctx context.Context, opts *PaginationOptions) *Iterator[Ticket]
 	GetTickets(ctx context.Context, opts *TicketListOptions) ([]Ticket, Page, error)
 	GetTicketsOBP(ctx context.Context, opts *OBPOptions) ([]Ticket, Page, error)
+	GetTicketUsersCC(ctx context.Context, opts *OBPOptions) ([]User, Page, error)
 	GetTicketsCBP(ctx context.Context, opts *CBPOptions) ([]Ticket, CursorPaginationMeta, error)
 	GetOrganizationTickets(ctx context.Context, organizationID int64, ops *TicketListOptions) ([]Ticket, Page, error)
 	GetOrganizationTicketsOBP(ctx context.Context, opts *OBPOptions) ([]Ticket, Page, error)
@@ -284,6 +285,43 @@ func (z *Client) GetTicketsCBP(ctx context.Context, opts *CBPOptions) ([]Ticket,
 		return nil, data.Meta, err
 	}
 	return data.Tickets, data.Meta, nil
+}
+
+// GetTicketUsersCC get collaborators users list with cursor based pagination
+//
+// ref: https://developer.zendesk.com/api-reference/ticketing/tickets/tickets/#list-email-ccs-for-a-ticket
+func (z *Client) GetTicketUsersCC(ctx context.Context, opts *OBPOptions) ([]User, Page, error) {
+	var data struct {
+		Users []User `json:"users"`
+		Page
+	}
+
+	tmp := opts
+	if tmp == nil {
+		tmp = &OBPOptions{}
+	}
+
+	url := fmt.Sprintf("/tickets/%d/email_ccs", opts.CommonOptions.Id)
+
+	var err error
+	if opts != nil {
+		url, err = addOptions(url, opts)
+		if err != nil {
+			return nil, Page{}, err
+		}
+	}
+
+	body, err := z.get(ctx, url)
+	if err != nil {
+		return nil, data.Page, err
+	}
+
+	err = json.Unmarshal(body, &data)
+	if err != nil {
+		return nil, data.Page, err
+	}
+
+	return data.Users, data.Page, nil
 }
 
 // GetOrganizationTickets get organization ticket list
