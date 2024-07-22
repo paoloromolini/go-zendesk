@@ -97,6 +97,9 @@ type Ticket struct {
 	// Collaborators is POST only
 	Collaborators *Collaborators `json:"collaborators,omitempty"`
 
+	// EmailCCs is used to add or to remove a user from email CC
+	EmailCCs []EmailCC `json:"email_ccs,omitempty"`
+
 	// Comment is POST only and required
 	Comment *TicketComment `json:"comment,omitempty"`
 
@@ -111,6 +114,15 @@ type Ticket struct {
 	Slas *Slas `json:"slas,omitempty"`
 
 	// TODO: TicketAudit (POST only) #126
+}
+
+// EmailCC is user information for email_ccs field value
+// ref: https://developer.zendesk.com/documentation/ticketing/managing-tickets/creating-and-updating-tickets/#setting-email-ccs
+type EmailCC struct {
+	UserID    int64  `json:"user_id,omitempty"`
+	UserEmail string `json:"user_email,omitempty"`
+	UserName  string `json:"user_name,omitempty"`
+	Action    string `json:"action,omitempty"`
 }
 
 type Slas struct {
