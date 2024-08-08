@@ -102,6 +102,17 @@ type UserRelated struct {
 	OrganizationSubscriptions int64 `json:"organization_subscriptions"`
 }
 
+// OrganizationSubscription contains an Organization Subscription data
+//
+// ref: https://developer.zendesk.com/api-reference/ticketing/organizations/organization_subscriptions/#json-format
+type OrganizationSubscription struct {
+	URL            string    `json:"url,omitempty"`
+	ID             int64     `json:"id,omitempty"`
+	OrganizationID int64     `json:"organization_id"`
+	UserID         int64     `json:"user_id"`
+	CreatedAt      time.Time `json:"created_at,omitempty"`
+}
+
 // SearchUsersOptions is options for SearchUsers
 //
 // ref: https://developer.zendesk.com/api-reference/ticketing/users/users/#search-users
@@ -138,6 +149,8 @@ type UserAPI interface {
 	AutocompleteUsers(ctx context.Context, opts *UserListOptions) ([]User, Page, error)
 	ListUserIdentities(ctx context.Context, userID int64) ([]Identity, error)
 	MakeUserIdentityPrimary(ctx context.Context, userID int64, userIdentityID int64) ([]Identity, error)
+	CreateOrganizationSubscription(ctx context.Context, sub OrganizationSubscription) (OrganizationSubscription, error)
+	DeleteOrganizationSubscription(ctx context.Context, subID int64) error
 }
 
 // GetUsers fetch user list
@@ -472,4 +485,33 @@ func (z *Client) MakeUserIdentityPrimary(ctx context.Context, userID int64, user
 		return []Identity{}, err
 	}
 	return result.Identities, err
+}
+
+// CreateOrganizationSubscription creates new user organization subscription
+// ref: https://developer.zendesk.com/api-reference/ticketing/organizations/organization_subscriptions/
+// #create-organization-subscription
+func (z *Client) CreateOrganizationSubscription(ctx context.Context, sub OrganizationSubscription) (
+	OrganizationSubscription, error) {
+	var data, result struct {
+		UserSub OrganizationSubscription `json:"organization_subscription"`
+	}
+	data.UserSub = sub
+
+	body, err := z.post(ctx, "/organization_subscriptions", data)
+	if err != nil {
+		return OrganizationSubscription{}, err
+	}
+
+	err = json.Unmarshal(body, &result)
+	if err != nil {
+		return OrganizationSubscription{}, err
+	}
+	return result.UserSub, nil
+}
+
+// DeleteOrganizationSubscription creates new user organization subscription
+// ref: https://developer.zendesk.com/api-reference/ticketing/organizations/organization_subscriptions/
+// #delete-organization-subscription
+func (z *Client) DeleteOrganizationSubscription(ctx context.Context, subID int64) error {
+	return z.delete(ctx, fmt.Sprintf("/organization_subscriptions/%v.json", subID))
 }

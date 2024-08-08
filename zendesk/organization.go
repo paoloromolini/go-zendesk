@@ -42,6 +42,8 @@ type OrganizationAPI interface {
 	AutocompleteOrganizations(ctx context.Context, opts *OrganizationListOptions) ([]Organization, Page, error)
 	UpdateOrganization(ctx context.Context, orgID int64, org Organization) (Organization, error)
 	DeleteOrganization(ctx context.Context, orgID int64) error
+	GetOrganizationSubscriptions(
+		ctx context.Context, orgID int64, opts *OrganizationListOptions) ([]OrganizationSubscription, Page, error)
 }
 
 // GetOrganizations fetch organization list
@@ -191,4 +193,37 @@ func (z *Client) DeleteOrganization(ctx context.Context, orgID int64) error {
 	}
 
 	return nil
+}
+
+// GetOrganizationSubscriptions get the list of organization subscription for an organization
+// ref: https://developer.zendesk.com/api-reference/ticketing/organizations/organization_subscriptions/
+// #list-organization-subscriptions
+func (z *Client) GetOrganizationSubscriptions(
+	ctx context.Context, orgID int64, opts *OrganizationListOptions) ([]OrganizationSubscription, Page, error) {
+	var data struct {
+		OrganizationSubscription []OrganizationSubscription `json:"organization_subscriptions"`
+		Page
+	}
+
+	if opts == nil {
+		return []OrganizationSubscription{}, Page{}, &OptionsError{opts}
+	}
+
+	url := fmt.Sprintf("/organizations/%d/subscriptions.json", orgID)
+	u, err := addOptions(url, opts)
+	if err != nil {
+		return []OrganizationSubscription{}, Page{}, err
+	}
+
+	body, err := z.get(ctx, u)
+	if err != nil {
+		return []OrganizationSubscription{}, Page{}, err
+	}
+
+	err = json.Unmarshal(body, &data)
+	if err != nil {
+		return []OrganizationSubscription{}, Page{}, err
+	}
+
+	return data.OrganizationSubscription, data.Page, nil
 }
