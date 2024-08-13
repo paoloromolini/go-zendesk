@@ -283,6 +283,21 @@ func (mr *ClientMockRecorder) CreateOrganizationMembership(arg0, arg1 any) *gomo
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateOrganizationMembership", reflect.TypeOf((*Client)(nil).CreateOrganizationMembership), arg0, arg1)
 }
 
+// CreateOrganizationSubscription mocks base method.
+func (m *Client) CreateOrganizationSubscription(ctx context.Context, sub zendesk.OrganizationSubscription) (zendesk.OrganizationSubscription, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateOrganizationSubscription", ctx, sub)
+	ret0, _ := ret[0].(zendesk.OrganizationSubscription)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateOrganizationSubscription indicates an expected call of CreateOrganizationSubscription.
+func (mr *ClientMockRecorder) CreateOrganizationSubscription(ctx, sub any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateOrganizationSubscription", reflect.TypeOf((*Client)(nil).CreateOrganizationSubscription), ctx, sub)
+}
+
 // CreateSLAPolicy mocks base method.
 func (m *Client) CreateSLAPolicy(ctx context.Context, slaPolicy zendesk.SLAPolicy) (zendesk.SLAPolicy, error) {
 	m.ctrl.T.Helper()
@@ -545,6 +560,20 @@ func (mr *ClientMockRecorder) DeleteOrganization(ctx, orgID any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteOrganization", reflect.TypeOf((*Client)(nil).DeleteOrganization), ctx, orgID)
 }
 
+// DeleteOrganizationSubscription mocks base method.
+func (m *Client) DeleteOrganizationSubscription(ctx context.Context, subID int64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteOrganizationSubscription", ctx, subID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteOrganizationSubscription indicates an expected call of DeleteOrganizationSubscription.
+func (mr *ClientMockRecorder) DeleteOrganizationSubscription(ctx, subID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteOrganizationSubscription", reflect.TypeOf((*Client)(nil).DeleteOrganizationSubscription), ctx, subID)
+}
+
 // DeleteSLAPolicy mocks base method.
 func (m *Client) DeleteSLAPolicy(ctx context.Context, id int64) error {
 	m.ctrl.T.Helper()
@@ -655,6 +684,22 @@ func (m *Client) DeleteWebhook(ctx context.Context, webhookID string) error {
 func (mr *ClientMockRecorder) DeleteWebhook(ctx, webhookID any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteWebhook", reflect.TypeOf((*Client)(nil).DeleteWebhook), ctx, webhookID)
+}
+
+// FilterCustomObjectRecords mocks base method.
+func (m *Client) FilterCustomObjectRecords(ctx context.Context, customObjectKey string, filterBody any, opts *zendesk.CursorPagination) ([]zendesk.CustomObjectRecord, zendesk.CursorPaginationMeta, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FilterCustomObjectRecords", ctx, customObjectKey, filterBody, opts)
+	ret0, _ := ret[0].([]zendesk.CustomObjectRecord)
+	ret1, _ := ret[1].(zendesk.CursorPaginationMeta)
+	ret2, _ := ret[2].(error)
+	return ret0, ret1, ret2
+}
+
+// FilterCustomObjectRecords indicates an expected call of FilterCustomObjectRecords.
+func (mr *ClientMockRecorder) FilterCustomObjectRecords(ctx, customObjectKey, filterBody, opts any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FilterCustomObjectRecords", reflect.TypeOf((*Client)(nil).FilterCustomObjectRecords), ctx, customObjectKey, filterBody, opts)
 }
 
 // Get mocks base method.
@@ -1043,6 +1088,22 @@ func (mr *ClientMockRecorder) GetOrganizationMemberships(arg0, arg1 any) *gomock
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetOrganizationMemberships", reflect.TypeOf((*Client)(nil).GetOrganizationMemberships), arg0, arg1)
 }
 
+// GetOrganizationSubscriptions mocks base method.
+func (m *Client) GetOrganizationSubscriptions(ctx context.Context, orgID int64, opts *zendesk.OrganizationListOptions) ([]zendesk.OrganizationSubscription, zendesk.Page, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetOrganizationSubscriptions", ctx, orgID, opts)
+	ret0, _ := ret[0].([]zendesk.OrganizationSubscription)
+	ret1, _ := ret[1].(zendesk.Page)
+	ret2, _ := ret[2].(error)
+	return ret0, ret1, ret2
+}
+
+// GetOrganizationSubscriptions indicates an expected call of GetOrganizationSubscriptions.
+func (mr *ClientMockRecorder) GetOrganizationSubscriptions(ctx, orgID, opts any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetOrganizationSubscriptions", reflect.TypeOf((*Client)(nil).GetOrganizationSubscriptions), ctx, orgID, opts)
+}
+
 // GetOrganizationTags mocks base method.
 func (m *Client) GetOrganizationTags(ctx context.Context, organizationID int64) ([]zendesk.Tag, error) {
 	m.ctrl.T.Helper()
@@ -1338,6 +1399,21 @@ func (mr *ClientMockRecorder) GetTicketForms(ctx, options any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetTicketForms", reflect.TypeOf((*Client)(nil).GetTicketForms), ctx, options)
 }
 
+// GetTicketOPT mocks base method.
+func (m *Client) GetTicketOPT(ctx context.Context, opts *zendesk.TicketOptions) (zendesk.Ticket, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetTicketOPT", ctx, opts)
+	ret0, _ := ret[0].(zendesk.Ticket)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetTicketOPT indicates an expected call of GetTicketOPT.
+func (mr *ClientMockRecorder) GetTicketOPT(ctx, opts any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetTicketOPT", reflect.TypeOf((*Client)(nil).GetTicketOPT), ctx, opts)
+}
+
 // GetTicketTags mocks base method.
 func (m *Client) GetTicketTags(ctx context.Context, ticketID int64) ([]zendesk.Tag, error) {
 	m.ctrl.T.Helper()
@@ -1351,6 +1427,22 @@ func (m *Client) GetTicketTags(ctx context.Context, ticketID int64) ([]zendesk.T
 func (mr *ClientMockRecorder) GetTicketTags(ctx, ticketID any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetTicketTags", reflect.TypeOf((*Client)(nil).GetTicketTags), ctx, ticketID)
+}
+
+// GetTicketUsersCC mocks base method.
+func (m *Client) GetTicketUsersCC(ctx context.Context, opts *zendesk.OBPOptions) ([]zendesk.User, zendesk.Page, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetTicketUsersCC", ctx, opts)
+	ret0, _ := ret[0].([]zendesk.User)
+	ret1, _ := ret[1].(zendesk.Page)
+	ret2, _ := ret[2].(error)
+	return ret0, ret1, ret2
+}
+
+// GetTicketUsersCC indicates an expected call of GetTicketUsersCC.
+func (mr *ClientMockRecorder) GetTicketUsersCC(ctx, opts any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetTicketUsersCC", reflect.TypeOf((*Client)(nil).GetTicketUsersCC), ctx, opts)
 }
 
 // GetTickets mocks base method.

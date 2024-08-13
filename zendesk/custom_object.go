@@ -73,6 +73,9 @@ type CustomObjectAPI interface {
 		ctx context.Context,
 		customObjectKey string,
 	) ([]CustomObjectField, error)
+	FilterCustomObjectRecords(
+		ctx context.Context, customObjectKey string, filterBody interface{}, opts *CursorPagination,
+	) ([]CustomObjectRecord, CursorPaginationMeta, error)
 }
 
 // CreateCustomObjectRecord CreateCustomObject create a custom object record
@@ -318,4 +321,32 @@ func (z *Client) ListCustomObjectFields(
 		return nil, err
 	}
 	return result.CustomObjectFields, nil
+}
+
+// FilterCustomObjectRecords
+// https://developer.zendesk.com/api-reference/custom-data/custom-objects/
+// custom_object_records/#filtered-search-of-custom-object-records
+func (z *Client) FilterCustomObjectRecords(
+	ctx context.Context, customObjectKey string, filterBody interface{}, opts *CursorPagination,
+) ([]CustomObjectRecord, CursorPaginationMeta, error) {
+	var data struct {
+		FilterBody interface{} `json:"filter"`
+	}
+
+	var result struct {
+		CustomObjectRecords []CustomObjectRecord `json:"custom_object_records"`
+		Meta                CursorPaginationMeta `json:"meta"`
+	}
+	tmp := opts
+	if tmp == nil {
+		tmp = &CursorPagination{}
+	}
+	url := fmt.Sprintf("/custom_objects/%s/records/search", customObjectKey)
+	urlWithOptions, err := addOptions(url, tmp)
+	body, err := z.post(ctx, urlWithOptions, data)
+	if err != nil {
+		return nil, CursorPaginationMeta{}, err
+	}
+	err = json.Unmarshal(body, &result)
+	return result.CustomObjectRecords, result.Meta, nil
 }
