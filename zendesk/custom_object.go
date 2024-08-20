@@ -48,7 +48,7 @@ type CustomObjectAPI interface {
 	) ([]CustomObjectRecord, CursorPaginationMeta, error)
 	SearchCustomObjectRecords(
 		ctx context.Context, customObjectKey string, opts *SearchCustomObjectRecordsOptions,
-	) ([]CustomObjectRecord, CursorPaginationMeta, error)
+	) ([]CustomObjectRecord, CursorPaginationMeta, int64, error)
 	ListCustomObjectRecords(
 		ctx context.Context, customObjectKey string, opts *CustomObjectListOptions) ([]CustomObjectRecord, CursorPaginationMeta, error)
 	ShowCustomObjectRecord(
@@ -75,7 +75,7 @@ type CustomObjectAPI interface {
 	) ([]CustomObjectField, error)
 	FilterCustomObjectRecords(
 		ctx context.Context, customObjectKey string, filterBody interface{}, opts *CursorPagination,
-	) ([]CustomObjectRecord, CursorPaginationMeta, error)
+	) ([]CustomObjectRecord, CursorPaginationMeta, int64, error)
 }
 
 // CreateCustomObjectRecord CreateCustomObject create a custom object record
@@ -183,8 +183,9 @@ type SearchCustomObjectRecordsOptions struct {
 // https://developer.zendesk.com/api-reference/custom-objects/custom_object_records/#search-custom-object-records
 func (z *Client) SearchCustomObjectRecords(
 	ctx context.Context, customObjectKey string, opts *SearchCustomObjectRecordsOptions,
-) ([]CustomObjectRecord, CursorPaginationMeta, error) {
+) ([]CustomObjectRecord, CursorPaginationMeta, int64, error) {
 	var result struct {
+		Count               int64                `json:"count"`
 		CustomObjectRecords []CustomObjectRecord `json:"custom_object_records"`
 		Meta                CursorPaginationMeta `json:"meta"`
 	}
@@ -197,13 +198,13 @@ func (z *Client) SearchCustomObjectRecords(
 	body, err := z.get(ctx, urlWithOptions)
 
 	if err != nil {
-		return nil, result.Meta, err
+		return nil, result.Meta, 0, err
 	}
 	err = json.Unmarshal(body, &result)
 	if err != nil {
-		return nil, result.Meta, err
+		return nil, result.Meta, 0, err
 	}
-	return result.CustomObjectRecords, result.Meta, nil
+	return result.CustomObjectRecords, result.Meta, result.Count, nil
 }
 
 // ShowCustomObjectRecord returns a custom record for a specific object using a provided id.
@@ -328,12 +329,13 @@ func (z *Client) ListCustomObjectFields(
 // custom_object_records/#filtered-search-of-custom-object-records
 func (z *Client) FilterCustomObjectRecords(
 	ctx context.Context, customObjectKey string, filterBody interface{}, opts *CursorPagination,
-) ([]CustomObjectRecord, CursorPaginationMeta, error) {
+) ([]CustomObjectRecord, CursorPaginationMeta, int64, error) {
 	var data struct {
 		FilterBody interface{} `json:"filter"`
 	}
-
+	data.FilterBody = filterBody
 	var result struct {
+		Count               int64                `json:"count"`
 		CustomObjectRecords []CustomObjectRecord `json:"custom_object_records"`
 		Meta                CursorPaginationMeta `json:"meta"`
 	}
@@ -345,8 +347,8 @@ func (z *Client) FilterCustomObjectRecords(
 	urlWithOptions, err := addOptions(url, tmp)
 	body, err := z.post(ctx, urlWithOptions, data)
 	if err != nil {
-		return nil, CursorPaginationMeta{}, err
+		return nil, CursorPaginationMeta{}, 0, err
 	}
 	err = json.Unmarshal(body, &result)
-	return result.CustomObjectRecords, result.Meta, nil
+	return result.CustomObjectRecords, result.Meta, result.Count, nil
 }

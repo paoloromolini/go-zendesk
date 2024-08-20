@@ -687,13 +687,14 @@ func (mr *ClientMockRecorder) DeleteWebhook(ctx, webhookID any) *gomock.Call {
 }
 
 // FilterCustomObjectRecords mocks base method.
-func (m *Client) FilterCustomObjectRecords(ctx context.Context, customObjectKey string, filterBody any, opts *zendesk.CursorPagination) ([]zendesk.CustomObjectRecord, zendesk.CursorPaginationMeta, error) {
+func (m *Client) FilterCustomObjectRecords(ctx context.Context, customObjectKey string, filterBody any, opts *zendesk.CursorPagination) ([]zendesk.CustomObjectRecord, zendesk.CursorPaginationMeta, int64, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FilterCustomObjectRecords", ctx, customObjectKey, filterBody, opts)
 	ret0, _ := ret[0].([]zendesk.CustomObjectRecord)
 	ret1, _ := ret[1].(zendesk.CursorPaginationMeta)
-	ret2, _ := ret[2].(error)
-	return ret0, ret1, ret2
+	ret2, _ := ret[2].(int64)
+	ret3, _ := ret[3].(error)
+	return ret0, ret1, ret2, ret3
 }
 
 // FilterCustomObjectRecords indicates an expected call of FilterCustomObjectRecords.
@@ -1918,13 +1919,14 @@ func (mr *ClientMockRecorder) SearchCount(ctx, opts any) *gomock.Call {
 }
 
 // SearchCustomObjectRecords mocks base method.
-func (m *Client) SearchCustomObjectRecords(ctx context.Context, customObjectKey string, opts *zendesk.SearchCustomObjectRecordsOptions) ([]zendesk.CustomObjectRecord, zendesk.CursorPaginationMeta, error) {
+func (m *Client) SearchCustomObjectRecords(ctx context.Context, customObjectKey string, opts *zendesk.SearchCustomObjectRecordsOptions) ([]zendesk.CustomObjectRecord, zendesk.CursorPaginationMeta, int64, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SearchCustomObjectRecords", ctx, customObjectKey, opts)
 	ret0, _ := ret[0].([]zendesk.CustomObjectRecord)
 	ret1, _ := ret[1].(zendesk.CursorPaginationMeta)
-	ret2, _ := ret[2].(error)
-	return ret0, ret1, ret2
+	ret2, _ := ret[2].(int64)
+	ret3, _ := ret[3].(error)
+	return ret0, ret1, ret2, ret3
 }
 
 // SearchCustomObjectRecords indicates an expected call of SearchCustomObjectRecords.
