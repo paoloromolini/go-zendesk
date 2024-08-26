@@ -151,6 +151,7 @@ type UserAPI interface {
 	MakeUserIdentityPrimary(ctx context.Context, userID int64, userIdentityID int64) ([]Identity, error)
 	CreateOrganizationSubscription(ctx context.Context, sub OrganizationSubscription) (OrganizationSubscription, error)
 	DeleteOrganizationSubscription(ctx context.Context, subID int64) error
+	GetUserOrganizationSubscriptions(ctx context.Context, userID int64, opts *OrganizationListOptions) ([]OrganizationSubscription, Page, error)
 }
 
 // GetUsers fetch user list
@@ -514,4 +515,37 @@ func (z *Client) CreateOrganizationSubscription(ctx context.Context, sub Organiz
 // #delete-organization-subscription
 func (z *Client) DeleteOrganizationSubscription(ctx context.Context, subID int64) error {
 	return z.delete(ctx, fmt.Sprintf("/organization_subscriptions/%v.json", subID))
+}
+
+// GetUserOrganizationSubscriptions get the list of organization subscription for a user
+// ref: https://developer.zendesk.com/api-reference/ticketing/organizations/organization_subscriptions/
+// #list-organization-subscriptions
+func (z *Client) GetUserOrganizationSubscriptions(
+	ctx context.Context, userID int64, opts *OrganizationListOptions) ([]OrganizationSubscription, Page, error) {
+	var data struct {
+		OrganizationSubscription []OrganizationSubscription `json:"organization_subscriptions"`
+		Page
+	}
+
+	if opts == nil {
+		return []OrganizationSubscription{}, Page{}, &OptionsError{opts}
+	}
+
+	url := fmt.Sprintf("/users/%d/organization_subscriptions.json", userID)
+	u, err := addOptions(url, opts)
+	if err != nil {
+		return []OrganizationSubscription{}, Page{}, err
+	}
+
+	body, err := z.get(ctx, u)
+	if err != nil {
+		return []OrganizationSubscription{}, Page{}, err
+	}
+
+	err = json.Unmarshal(body, &data)
+	if err != nil {
+		return []OrganizationSubscription{}, Page{}, err
+	}
+
+	return data.OrganizationSubscription, data.Page, nil
 }
