@@ -74,7 +74,7 @@ type CustomObjectAPI interface {
 		customObjectKey string,
 	) ([]CustomObjectField, error)
 	FilterCustomObjectRecords(
-		ctx context.Context, customObjectKey string, filterBody interface{}, opts *CursorPagination,
+		ctx context.Context, customObjectKey string, filterBody interface{}, opts *SearchCustomObjectRecordsOptions,
 	) ([]CustomObjectRecord, CursorPaginationMeta, int64, error)
 }
 
@@ -328,7 +328,7 @@ func (z *Client) ListCustomObjectFields(
 // https://developer.zendesk.com/api-reference/custom-data/custom-objects/
 // custom_object_records/#filtered-search-of-custom-object-records
 func (z *Client) FilterCustomObjectRecords(
-	ctx context.Context, customObjectKey string, filterBody interface{}, opts *CursorPagination,
+	ctx context.Context, customObjectKey string, filterBody interface{}, opts *SearchCustomObjectRecordsOptions,
 ) ([]CustomObjectRecord, CursorPaginationMeta, int64, error) {
 	var data struct {
 		FilterBody interface{} `json:"filter"`
@@ -341,7 +341,7 @@ func (z *Client) FilterCustomObjectRecords(
 	}
 	tmp := opts
 	if tmp == nil {
-		tmp = &CursorPagination{}
+		tmp = &SearchCustomObjectRecordsOptions{}
 	}
 	url := fmt.Sprintf("/custom_objects/%s/records/search", customObjectKey)
 	urlWithOptions, err := addOptions(url, tmp)

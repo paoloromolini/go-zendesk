@@ -687,7 +687,7 @@ func (mr *ClientMockRecorder) DeleteWebhook(ctx, webhookID any) *gomock.Call {
 }
 
 // FilterCustomObjectRecords mocks base method.
-func (m *Client) FilterCustomObjectRecords(ctx context.Context, customObjectKey string, filterBody any, opts *zendesk.CursorPagination) ([]zendesk.CustomObjectRecord, zendesk.CursorPaginationMeta, int64, error) {
+func (m *Client) FilterCustomObjectRecords(ctx context.Context, customObjectKey string, filterBody any, opts *zendesk.SearchCustomObjectRecordsOptions) ([]zendesk.CustomObjectRecord, zendesk.CursorPaginationMeta, int64, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FilterCustomObjectRecords", ctx, customObjectKey, filterBody, opts)
 	ret0, _ := ret[0].([]zendesk.CustomObjectRecord)
@@ -1584,6 +1584,22 @@ func (m *Client) GetUserFields(ctx context.Context, opts *zendesk.UserFieldListO
 func (mr *ClientMockRecorder) GetUserFields(ctx, opts any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserFields", reflect.TypeOf((*Client)(nil).GetUserFields), ctx, opts)
+}
+
+// GetUserOrganizationSubscriptions mocks base method.
+func (m *Client) GetUserOrganizationSubscriptions(ctx context.Context, userID int64, opts *zendesk.OrganizationListOptions) ([]zendesk.OrganizationSubscription, zendesk.Page, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetUserOrganizationSubscriptions", ctx, userID, opts)
+	ret0, _ := ret[0].([]zendesk.OrganizationSubscription)
+	ret1, _ := ret[1].(zendesk.Page)
+	ret2, _ := ret[2].(error)
+	return ret0, ret1, ret2
+}
+
+// GetUserOrganizationSubscriptions indicates an expected call of GetUserOrganizationSubscriptions.
+func (mr *ClientMockRecorder) GetUserOrganizationSubscriptions(ctx, userID, opts any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserOrganizationSubscriptions", reflect.TypeOf((*Client)(nil).GetUserOrganizationSubscriptions), ctx, userID, opts)
 }
 
 // GetUserRelated mocks base method.
