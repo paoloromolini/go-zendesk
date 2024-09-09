@@ -1982,6 +1982,21 @@ func (mr *ClientMockRecorder) SetDefaultOrganization(arg0, arg1 any) *gomock.Cal
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetDefaultOrganization", reflect.TypeOf((*Client)(nil).SetDefaultOrganization), arg0, arg1)
 }
 
+// ShowCustomObjectField mocks base method.
+func (m *Client) ShowCustomObjectField(ctx context.Context, customObjectKey, customObjectFieldKeyOrId string) (zendesk.CustomObjectField, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ShowCustomObjectField", ctx, customObjectKey, customObjectFieldKeyOrId)
+	ret0, _ := ret[0].(zendesk.CustomObjectField)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ShowCustomObjectField indicates an expected call of ShowCustomObjectField.
+func (mr *ClientMockRecorder) ShowCustomObjectField(ctx, customObjectKey, customObjectFieldKeyOrId any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ShowCustomObjectField", reflect.TypeOf((*Client)(nil).ShowCustomObjectField), ctx, customObjectKey, customObjectFieldKeyOrId)
+}
+
 // ShowCustomObjectRecord mocks base method.
 func (m *Client) ShowCustomObjectRecord(ctx context.Context, customObjectKey, customObjectRecordID string) (*zendesk.CustomObjectRecord, error) {
 	m.ctrl.T.Helper()

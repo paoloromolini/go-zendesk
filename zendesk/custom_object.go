@@ -20,21 +20,29 @@ type CustomObjectRecord struct {
 	ExternalID         string                 `json:"external_id,omitempty"`
 }
 
+type CustomObjectFieldOptions struct {
+	ID      int64  `json:"id"`
+	Name    string `json:"name"`
+	RawName string `json:"raw_name"`
+	Value   string `json:"value"`
+}
+
 type CustomObjectField struct {
-	Active              bool        `json:"active"`
-	CreatedAt           time.Time   `json:"created_at"`
-	Description         string      `json:"description"`
-	ID                  int64       `json:"id"`
-	Key                 string      `json:"key"`
-	Position            int         `json:"position"`
-	RawDescription      string      `json:"raw_description"`
-	RawTitle            string      `json:"raw_title"`
-	RegexpForValidation interface{} `json:"regexp_for_validation"`
-	System              bool        `json:"system"`
-	Title               string      `json:"title"`
-	Type                string      `json:"type"`
-	UpdatedAt           time.Time   `json:"updated_at"`
-	URL                 string      `json:"url"`
+	Active              bool                       `json:"active"`
+	CreatedAt           time.Time                  `json:"created_at"`
+	Description         string                     `json:"description"`
+	ID                  int64                      `json:"id"`
+	Key                 string                     `json:"key"`
+	Position            int                        `json:"position"`
+	RawDescription      string                     `json:"raw_description"`
+	RawTitle            string                     `json:"raw_title"`
+	RegexpForValidation interface{}                `json:"regexp_for_validation"`
+	System              bool                       `json:"system"`
+	Title               string                     `json:"title"`
+	Type                string                     `json:"type"`
+	UpdatedAt           time.Time                  `json:"updated_at"`
+	URL                 string                     `json:"url"`
+	CustomFieldOptions  []CustomObjectFieldOptions `json:"custom_field_options,omitempty"`
 }
 
 // CustomObjectAPI an interface containing all custom object related methods
@@ -73,6 +81,9 @@ type CustomObjectAPI interface {
 		ctx context.Context,
 		customObjectKey string,
 	) ([]CustomObjectField, error)
+	ShowCustomObjectField(
+		ctx context.Context, customObjectKey string, customObjectFieldKeyOrId string,
+	) (CustomObjectField, error)
 	FilterCustomObjectRecords(
 		ctx context.Context, customObjectKey string, filterBody interface{}, opts *SearchCustomObjectRecordsOptions,
 	) ([]CustomObjectRecord, CursorPaginationMeta, int64, error)
@@ -351,4 +362,26 @@ func (z *Client) FilterCustomObjectRecords(
 	}
 	err = json.Unmarshal(body, &result)
 	return result.CustomObjectRecords, result.Meta, result.Count, nil
+}
+
+// ShowCustomObjectField Returns a custom field for a specific object using a provided key or id of the field.
+func (z *Client) ShowCustomObjectField(
+	ctx context.Context, customObjectKey string, customObjectFieldKeyOrId string,
+) (CustomObjectField, error) {
+	var result struct {
+		CustomObjectField CustomObjectField `json:"custom_object_field"`
+	}
+
+	url := fmt.Sprintf("/custom_objects/%s/fields/%s", customObjectKey, customObjectFieldKeyOrId)
+	body, err := z.get(ctx, url)
+
+	if err != nil {
+		return CustomObjectField{}, err
+	}
+	err = json.Unmarshal(body, &result)
+
+	if err != nil {
+		return CustomObjectField{}, err
+	}
+	return result.CustomObjectField, nil
 }
