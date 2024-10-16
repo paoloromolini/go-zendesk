@@ -1246,13 +1246,12 @@ func (mr *ClientMockRecorder) GetSLAPolicy(ctx, id any) *gomock.Call {
 }
 
 // GetSourcesByTarget mocks base method.
-func (m *Client) GetSourcesByTarget(ctx context.Context, fieldID, sourceType, targetID, targetType string, opts *zendesk.PageOptions) ([]zendesk.CustomObjectRecord, zendesk.Page, error) {
+func (m *Client) GetSourcesByTarget(ctx context.Context, fieldID, sourceType, targetID, targetType string, opts *zendesk.PageOptions) (zendesk.GetSourceByTargetResult, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetSourcesByTarget", ctx, fieldID, sourceType, targetID, targetType, opts)
-	ret0, _ := ret[0].([]zendesk.CustomObjectRecord)
-	ret1, _ := ret[1].(zendesk.Page)
-	ret2, _ := ret[2].(error)
-	return ret0, ret1, ret2
+	ret0, _ := ret[0].(zendesk.GetSourceByTargetResult)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // GetSourcesByTarget indicates an expected call of GetSourcesByTarget.

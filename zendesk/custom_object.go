@@ -72,7 +72,7 @@ type CustomObjectAPI interface {
 		targetID string,
 		targetType string,
 		opts *PageOptions,
-	) ([]CustomObjectRecord, Page, error)
+	) (GetSourceByTargetResult, error)
 	DeleteCustomObjectRecord(
 		ctx context.Context,
 		record CustomObjectRecord,
@@ -265,6 +265,15 @@ func (z *Client) UpdateCustomObjectRecord(
 	return &result.CustomObjectRecord, nil
 }
 
+// GetSourceByTargetResult result of the Get Source By Target
+type GetSourceByTargetResult struct {
+	CustomObjectRecords []CustomObjectRecord `json:"custom_object_records,omitempty"`
+	Users               []User               `json:"users,omitempty"`
+	Organizations       []Organization       `json:"organizations,omitempty"`
+	Tickets             []Ticket             `json:"tickets,omitempty"`
+	Page
+}
+
 // GetSourcesByTarget Returns a list of source objects whose values are populated with the id of a related target object
 // https://developer.zendesk.com/api-reference/ticketing/lookup_relationships/lookup_relationships/#get-sources-by-target
 func (z *Client) GetSourcesByTarget(
@@ -274,11 +283,8 @@ func (z *Client) GetSourcesByTarget(
 	fieldID string,
 	sourceType string,
 	opts *PageOptions,
-) ([]CustomObjectRecord, Page, error) {
-	var result struct {
-		CustomObjectRecords []CustomObjectRecord `json:"custom_object_records"`
-		Page
-	}
+) (GetSourceByTargetResult, error) {
+	result := GetSourceByTargetResult{}
 	tmp := opts
 	if tmp == nil {
 		tmp = &PageOptions{}
@@ -288,13 +294,13 @@ func (z *Client) GetSourcesByTarget(
 	body, err := z.get(ctx, urlWithOptions)
 
 	if err != nil {
-		return nil, Page{}, err
+		return GetSourceByTargetResult{}, err
 	}
 	err = json.Unmarshal(body, &result)
 	if err != nil {
-		return nil, Page{}, err
+		return GetSourceByTargetResult{}, err
 	}
-	return result.CustomObjectRecords, result.Page, nil
+	return result, nil
 }
 
 // DeleteCustomObjectRecord Delete a custom object record
