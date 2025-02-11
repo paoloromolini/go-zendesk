@@ -33,9 +33,16 @@ type OrganizationListOptions struct {
 	PageOptions
 }
 
+type ShowManyOrganizationsOptions struct {
+	PageOptions
+	ExternalIDs []int64 `json:"external_ids,omitempty" url:"external_ids,omitempty"`
+	IDs         []int64 `json:"ids,omitempty" url:"ids,omitempty"`
+}
+
 // OrganizationAPI an interface containing all methods associated with zendesk organizations
 type OrganizationAPI interface {
 	GetOrganizations(ctx context.Context, opts *OrganizationListOptions) ([]Organization, Page, error)
+	ShowManyOrganizations(ctx context.Context, opts *ShowManyOrganizationsOptions) ([]Organization, Page, error)
 	CreateOrganization(ctx context.Context, org Organization) (Organization, error)
 	GetOrganization(ctx context.Context, orgID int64) (Organization, error)
 	GetOrganizationByExternalID(ctx context.Context, externalID string) ([]Organization, Page, error)
@@ -60,6 +67,36 @@ func (z *Client) GetOrganizations(ctx context.Context, opts *OrganizationListOpt
 	}
 
 	u, err := addOptions("/organizations.json", opts)
+	if err != nil {
+		return []Organization{}, Page{}, err
+	}
+
+	body, err := z.get(ctx, u)
+	if err != nil {
+		return []Organization{}, Page{}, err
+	}
+
+	err = json.Unmarshal(body, &data)
+	if err != nil {
+		return []Organization{}, Page{}, err
+	}
+
+	return data.Organizations, data.Page, nil
+}
+
+// ShowManyOrganizations Accepts a comma-separated list of up to 100 organization ids or external ids.
+//
+// ref: https://developer.zendesk.com/api-reference/ticketing/organizations/organizations/#show-many-organizations
+func (z *Client) ShowManyOrganizations(ctx context.Context, opts *ShowManyOrganizationsOptions) ([]Organization, Page, error) {
+	var data struct {
+		Organizations []Organization `json:"organizations"`
+		Page
+	}
+	if opts == nil {
+		return []Organization{}, Page{}, &OptionsError{opts}
+	}
+
+	u, err := addOptions("/organizations/show_many.json", opts)
 	if err != nil {
 		return []Organization{}, Page{}, err
 	}

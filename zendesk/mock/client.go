@@ -2026,6 +2026,22 @@ func (mr *ClientMockRecorder) ShowCustomTicketStatus(ctx, customStatusID any) *g
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ShowCustomTicketStatus", reflect.TypeOf((*Client)(nil).ShowCustomTicketStatus), ctx, customStatusID)
 }
 
+// ShowManyOrganizations mocks base method.
+func (m *Client) ShowManyOrganizations(ctx context.Context, opts *zendesk.ShowManyOrganizationsOptions) ([]zendesk.Organization, zendesk.Page, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ShowManyOrganizations", ctx, opts)
+	ret0, _ := ret[0].([]zendesk.Organization)
+	ret1, _ := ret[1].(zendesk.Page)
+	ret2, _ := ret[2].(error)
+	return ret0, ret1, ret2
+}
+
+// ShowManyOrganizations indicates an expected call of ShowManyOrganizations.
+func (mr *ClientMockRecorder) ShowManyOrganizations(ctx, opts any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ShowManyOrganizations", reflect.TypeOf((*Client)(nil).ShowManyOrganizations), ctx, opts)
+}
+
 // UpdateAutomation mocks base method.
 func (m *Client) UpdateAutomation(ctx context.Context, id int64, automation zendesk.Automation) (zendesk.Automation, error) {
 	m.ctrl.T.Helper()
