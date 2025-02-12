@@ -35,8 +35,8 @@ type OrganizationListOptions struct {
 
 type ShowManyOrganizationsOptions struct {
 	PageOptions
-	ExternalIDs []int64 `json:"external_ids,omitempty" url:"external_ids,omitempty"`
-	IDs         []int64 `json:"ids,omitempty" url:"ids,omitempty"`
+	ExternalIDs string `json:"external_ids,omitempty" url:"external_ids,omitempty"`
+	IDs         string `json:"ids,omitempty" url:"ids,omitempty"`
 }
 
 // OrganizationAPI an interface containing all methods associated with zendesk organizations
