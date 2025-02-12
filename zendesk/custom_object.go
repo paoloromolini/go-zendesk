@@ -71,7 +71,7 @@ type CustomObjectAPI interface {
 		sourceType string,
 		targetID string,
 		targetType string,
-		opts *PageOptions,
+		opts *CursorPagination,
 	) (GetSourceByTargetResult, error)
 	DeleteCustomObjectRecord(
 		ctx context.Context,
@@ -271,7 +271,7 @@ type GetSourceByTargetResult struct {
 	Users               []User               `json:"users,omitempty"`
 	Organizations       []Organization       `json:"organizations,omitempty"`
 	Tickets             []Ticket             `json:"tickets,omitempty"`
-	Page
+	Meta                CursorPaginationMeta
 }
 
 // GetSourcesByTarget Returns a list of source objects whose values are populated with the id of a related target object
@@ -282,12 +282,12 @@ func (z *Client) GetSourcesByTarget(
 	targetID string,
 	fieldID string,
 	sourceType string,
-	opts *PageOptions,
+	opts *CursorPagination,
 ) (GetSourceByTargetResult, error) {
 	result := GetSourceByTargetResult{}
 	tmp := opts
 	if tmp == nil {
-		tmp = &PageOptions{}
+		tmp = &CursorPagination{}
 	}
 	url := fmt.Sprintf("/%s/%s/relationship_fields/%s/%s", targetType, targetID, fieldID, sourceType)
 	urlWithOptions, err := addOptions(url, tmp)
