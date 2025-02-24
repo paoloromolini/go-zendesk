@@ -504,6 +504,20 @@ func (mr *ClientMockRecorder) DeleteCustomObjectRecord(ctx, record any) *gomock.
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteCustomObjectRecord", reflect.TypeOf((*Client)(nil).DeleteCustomObjectRecord), ctx, record)
 }
 
+// DeleteCustomObjectRecordByExternalID mocks base method.
+func (m *Client) DeleteCustomObjectRecordByExternalID(ctx context.Context, customObjectKey string, opts *zendesk.DeleteCustomObjectRecordByExternalIDOptions) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteCustomObjectRecordByExternalID", ctx, customObjectKey, opts)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteCustomObjectRecordByExternalID indicates an expected call of DeleteCustomObjectRecordByExternalID.
+func (mr *ClientMockRecorder) DeleteCustomObjectRecordByExternalID(ctx, customObjectKey, opts any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteCustomObjectRecordByExternalID", reflect.TypeOf((*Client)(nil).DeleteCustomObjectRecordByExternalID), ctx, customObjectKey, opts)
+}
+
 // DeleteDynamicContentItem mocks base method.
 func (m *Client) DeleteDynamicContentItem(ctx context.Context, id int64) error {
 	m.ctrl.T.Helper()

@@ -77,6 +77,11 @@ type CustomObjectAPI interface {
 		ctx context.Context,
 		record CustomObjectRecord,
 	) error
+	DeleteCustomObjectRecordByExternalID(
+		ctx context.Context,
+		customObjectKey string,
+		opts *DeleteCustomObjectRecordByExternalIDOptions,
+	) error
 	ListCustomObjectFields(
 		ctx context.Context,
 		customObjectKey string,
@@ -311,6 +316,33 @@ func (z *Client) DeleteCustomObjectRecord(
 ) error {
 	endpointURL := fmt.Sprintf("/custom_objects/%s/records/%s", record.CustomObjectKey, record.ID)
 	err := z.delete(ctx, endpointURL)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// DeleteCustomObjectRecordByExternalIDOptions options for deleting a custom object record by external id or name
+type DeleteCustomObjectRecordByExternalIDOptions struct {
+	ExternalID string `url:"external_id,omitempty"`
+	Name       string `url:"name,omitempty"`
+}
+
+// DeleteCustomObjectRecordByExternalID Delete a custom object record by external id
+// https://developer.zendesk.com/api-reference/custom-data/custom-objects/custom_object_records/#delete-custom-object-record-by-external-id-or-name
+func (z *Client) DeleteCustomObjectRecordByExternalID(
+	ctx context.Context,
+	customObjectKey string,
+	opts *DeleteCustomObjectRecordByExternalIDOptions,
+) error {
+
+	tmp := opts
+	if tmp == nil {
+		tmp = &DeleteCustomObjectRecordByExternalIDOptions{}
+	}
+	url := fmt.Sprintf("/custom_objects/%s/records", customObjectKey)
+	urlWithOptions, err := addOptions(url, tmp)
+	err = z.delete(ctx, urlWithOptions)
 	if err != nil {
 		return err
 	}
