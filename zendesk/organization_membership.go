@@ -36,10 +36,28 @@ type (
 		UserID         int64 `json:"user_id,omitempty"`
 	}
 
+	// OrganizationMembershipsList is a struct for organization memberships payload
+	OrganizationMembershipsList struct {
+		OrganizationMemberships []OrganizationMembershipOptions `json:"organization_memberships"`
+	}
+
+	JobStatus struct {
+		ID       string      `json:"id"`
+		URL      string      `json:"url"`
+		Total    interface{} `json:"total"`
+		Progress interface{} `json:"progress"`
+		Status   string      `json:"status"`
+		Message  string      `json:"message"`
+		Results  struct {
+			Success bool `json:"success"`
+		} `json:"results"`
+	}
+
 	// OrganizationMembershipAPI is an interface containing organization membership related methods
 	OrganizationMembershipAPI interface {
 		GetOrganizationMemberships(context.Context, *OrganizationMembershipListOptions) ([]OrganizationMembership, Page, error)
 		CreateOrganizationMembership(context.Context, OrganizationMembershipOptions) (OrganizationMembership, error)
+		CreateManyOrganizationMemberships(context.Context, OrganizationMembershipsList) (JobStatus, error)
 		SetDefaultOrganization(context.Context, OrganizationMembershipOptions) (OrganizationMembership, error)
 	}
 )
@@ -117,4 +135,25 @@ func (z *Client) SetDefaultOrganization(ctx context.Context, opts OrganizationMe
 	}
 
 	return result.OrganizationMembership, nil
+}
+
+// CreateManyOrganizationMemberships creates many organization membership for existing users and organizations
+// https://developer.zendesk.com/api-reference/ticketing/organizations/organization_memberships/#create-many-memberships
+func (z *Client) CreateManyOrganizationMemberships(ctx context.Context, data OrganizationMembershipsList) (JobStatus, error) {
+	var result struct {
+		JobStatus JobStatus `json:"job_status"`
+	}
+
+	body, err := z.post(ctx, "/organization_memberships/create_many", data)
+
+	if err != nil {
+		return JobStatus{}, err
+	}
+
+	err = json.Unmarshal(body, &result)
+	if err != nil {
+		return JobStatus{}, err
+	}
+
+	return result.JobStatus, err
 }
