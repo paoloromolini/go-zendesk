@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strings"
 	"time"
 )
 
@@ -58,6 +59,7 @@ type (
 		GetOrganizationMemberships(context.Context, *OrganizationMembershipListOptions) ([]OrganizationMembership, Page, error)
 		CreateOrganizationMembership(context.Context, OrganizationMembershipOptions) (OrganizationMembership, error)
 		CreateManyOrganizationMemberships(context.Context, OrganizationMembershipsList) (JobStatus, error)
+		DeleteManyOrganizationMemberships(context.Context, []string) error
 		SetDefaultOrganization(context.Context, OrganizationMembershipOptions) (OrganizationMembership, error)
 	}
 )
@@ -156,4 +158,17 @@ func (z *Client) CreateManyOrganizationMemberships(ctx context.Context, data Org
 	}
 
 	return result.JobStatus, err
+}
+
+// DeleteManyOrganizationMemberships deletes many organization membership passing organization memberships IDs
+// https://developer.zendesk.com/api-reference/ticketing/organizations/organization_memberships/#bulk-delete-memberships
+func (z *Client) DeleteManyOrganizationMemberships(ctx context.Context, IDs []string) error {
+	ids := strings.Join(IDs, ",")
+	err := z.delete(ctx, fmt.Sprintf("/organization_memberships/destroy_many?ids=%v", ids))
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
