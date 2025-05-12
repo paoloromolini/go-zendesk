@@ -62,7 +62,7 @@ type RequestsField struct {
 // ref: https://developer.zendesk.com/api-reference/ticketing/tickets/ticket-requests/#parameters-1
 type RequestsOptions struct {
 	SearchOptions  `json:",inline"`
-	OrganizationID int64 `url:"organization_id"`
+	OrganizationID int64 `url:"organization_id,omitempty"`
 }
 
 type SearchRequestsAPI interface {
@@ -81,17 +81,17 @@ func (z *Client) SearchRequests(ctx context.Context, opts *RequestsOptions) (Req
 
 	u, err := addOptions("/requests/search.json", opts)
 	if err != nil {
-		return RequestsWithUsers{}, Page{}, &OptionsError{opts}
+		return RequestsWithUsers{}, Page{}, err
 	}
 
 	body, err := z.get(ctx, u)
 	if err != nil {
-		return RequestsWithUsers{}, Page{}, &OptionsError{opts}
+		return RequestsWithUsers{}, Page{}, err
 	}
 
 	err = json.Unmarshal(body, &data)
 	if err != nil {
-		return RequestsWithUsers{}, Page{}, &OptionsError{opts}
+		return RequestsWithUsers{}, Page{}, err
 	}
 
 	return data, data.Page, nil
