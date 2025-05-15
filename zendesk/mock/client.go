@@ -223,6 +223,21 @@ func (mr *ClientMockRecorder) CreateMacro(ctx, macro any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateMacro", reflect.TypeOf((*Client)(nil).CreateMacro), ctx, macro)
 }
 
+// CreateManyOrganizationMemberships mocks base method.
+func (m *Client) CreateManyOrganizationMemberships(arg0 context.Context, arg1 zendesk.OrganizationMembershipsList) (zendesk.JobStatus, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateManyOrganizationMemberships", arg0, arg1)
+	ret0, _ := ret[0].(zendesk.JobStatus)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateManyOrganizationMemberships indicates an expected call of CreateManyOrganizationMemberships.
+func (mr *ClientMockRecorder) CreateManyOrganizationMemberships(arg0, arg1 any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateManyOrganizationMemberships", reflect.TypeOf((*Client)(nil).CreateManyOrganizationMemberships), arg0, arg1)
+}
+
 // CreateOrUpdateUser mocks base method.
 func (m *Client) CreateOrUpdateUser(ctx context.Context, user zendesk.User) (zendesk.User, error) {
 	m.ctrl.T.Helper()
@@ -558,6 +573,20 @@ func (m *Client) DeleteMacro(ctx context.Context, macroID int64) error {
 func (mr *ClientMockRecorder) DeleteMacro(ctx, macroID any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteMacro", reflect.TypeOf((*Client)(nil).DeleteMacro), ctx, macroID)
+}
+
+// DeleteManyOrganizationMemberships mocks base method.
+func (m *Client) DeleteManyOrganizationMemberships(arg0 context.Context, arg1 []string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteManyOrganizationMemberships", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteManyOrganizationMemberships indicates an expected call of DeleteManyOrganizationMemberships.
+func (mr *ClientMockRecorder) DeleteManyOrganizationMemberships(arg0, arg1 any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteManyOrganizationMemberships", reflect.TypeOf((*Client)(nil).DeleteManyOrganizationMemberships), arg0, arg1)
 }
 
 // DeleteOrganization mocks base method.

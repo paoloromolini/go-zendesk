@@ -10,37 +10,41 @@ import (
 //
 // ref: https://developer.zendesk.com/api-reference/ticketing/ticket-management/search/#available-parameters
 type RequestsWithUsers struct {
-	Requests []Requests `json:"requests"`
-	Users    []User     `json:"users,omitempty"`
+	Requests []Request `json:"requests"`
+	Users    []User    `json:"users,omitempty"`
 	Page
 }
 
-// Requests is struct for requests payload
-type Requests struct {
-	URL              string          `json:"url,omitempty"`
-	ID               int             `json:"id,omitempty"`
-	Status           string          `json:"status,omitempty"`
-	Priority         string          `json:"priority,omitempty"`
-	Type             string          `json:"type,omitempty"`
-	Subject          string          `json:"subject,omitempty"`
-	Description      string          `json:"description,omitempty"`
-	OrganizationID   int64           `json:"organization_id,omitempty"`
-	Via              RequestsVia     `json:"via,omitempty"`
-	CustomFields     []CustomField   `json:"custom_fields,omitempty"`
-	RequesterID      int64           `json:"requester_id,omitempty"`
-	CollaboratorIds  []int64         `json:"collaborator_ids,omitempty"`
-	EmailCcIds       []int64         `json:"email_cc_ids,omitempty"`
-	IsPublic         bool            `json:"is_public,omitempty"`
-	DueAt            *time.Time      `json:"due_at,omitempty"`
-	CanBeSolvedByMe  bool            `json:"can_be_solved_by_me,omitempty"`
-	CreatedAt        *time.Time      `json:"created_at,omitempty"`
-	UpdatedAt        *time.Time      `json:"updated_at,omitempty"`
-	Recipient        string          `json:"recipient,omitempty"`
-	FollowupSourceID int64           `json:"followup_source_id,omitempty"`
-	AssigneeID       int64           `json:"assignee_id,omitempty"`
-	TicketFormID     int64           `json:"ticket_form_id,omitempty"`
-	CustomStatusID   int64           `json:"custom_status_id,omitempty"`
-	Fields           []RequestsField `json:"fields,omitempty"`
+// Request is struct for requests payload
+type Request struct {
+	URL                 string          `json:"url,omitempty"`
+	ID                  int             `json:"id,omitempty"`
+	Status              string          `json:"status,omitempty"`
+	Priority            string          `json:"priority,omitempty"`
+	Type                string          `json:"type,omitempty"`
+	Subject             string          `json:"subject,omitempty"`
+	Description         string          `json:"description,omitempty"`
+	OrganizationID      int64           `json:"organization_id,omitempty"`
+	Via                 RequestsVia     `json:"via,omitempty"`
+	CustomFields        []CustomField   `json:"custom_fields,omitempty"`
+	RequesterID         int64           `json:"requester_id,omitempty"`
+	CollaboratorIds     []int64         `json:"collaborator_ids,omitempty"`
+	EmailCcIds          []int64         `json:"email_cc_ids,omitempty"`
+	IsPublic            bool            `json:"is_public,omitempty"`
+	DueAt               *time.Time      `json:"due_at,omitempty"`
+	CanBeSolvedByMe     bool            `json:"can_be_solved_by_me,omitempty"`
+	CreatedAt           *time.Time      `json:"created_at,omitempty"`
+	UpdatedAt           *time.Time      `json:"updated_at,omitempty"`
+	Recipient           string          `json:"recipient,omitempty"`
+	FollowupSourceID    int64           `json:"followup_source_id,omitempty"`
+	AssigneeID          int64           `json:"assignee_id,omitempty"`
+	TicketFormID        int64           `json:"ticket_form_id,omitempty"`
+	CustomStatusID      int64           `json:"custom_status_id,omitempty"`
+	Fields              []RequestsField `json:"fields,omitempty"`
+	Tags                []string        `json:"tags,omitempty"`
+	ViaFollowupSourceID int64           `json:"via_followup_source_id,omitempty"`
+	// Comment is POST only and required
+	Comment *TicketComment `json:"comment,omitempty"`
 }
 
 type RequestsVia struct {
@@ -66,7 +70,8 @@ type RequestsOptions struct {
 }
 
 type SearchRequestsAPI interface {
-	SearchRequests(ctx context.Context, opts *RequestsOptions) ([]Requests, Page, error)
+	SearchRequests(ctx context.Context, opts *RequestsOptions) ([]Request, Page, error)
+	CreateRequest(ctx context.Context, request Request) (Request, error)
 }
 
 // Search requests allows end users to query zendesk requests search api
@@ -95,4 +100,25 @@ func (z *Client) SearchRequests(ctx context.Context, opts *RequestsOptions) (Req
 	}
 
 	return data, data.Page, nil
+}
+
+// CreateRequest create a new request
+//
+// ref: https://developer.zendesk.com/api-reference/ticketing/tickets/ticket-requests/#create-request
+func (z *Client) CreateRequest(ctx context.Context, request Request) (Request, error) {
+	var data, result struct {
+		Request Request `json:"request"`
+	}
+	data.Request = request
+
+	body, err := z.post(ctx, "/requests.json", data)
+	if err != nil {
+		return Request{}, err
+	}
+
+	err = json.Unmarshal(body, &result)
+	if err != nil {
+		return Request{}, err
+	}
+	return result.Request, nil
 }
