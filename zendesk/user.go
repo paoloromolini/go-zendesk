@@ -396,10 +396,13 @@ func (z *Client) UpdateSuspendedUser(ctx context.Context, userID int64, suspende
 	var data struct {
 		User struct {
 			Suspended bool `json:"suspended"`
+			Verified  bool `json:"verified,omitempty"`
 		} `json:"user"`
 	}
 	data.User.Suspended = suspended
-
+	if suspended == false {
+		data.User.Verified = true // if unsuspending, we also verify the user
+	}
 	body, err := z.put(ctx, fmt.Sprintf("/users/%d.json", userID), data)
 	if err != nil {
 		return false, err
