@@ -61,8 +61,34 @@ type (
 		CreateManyOrganizationMemberships(context.Context, OrganizationMembershipsList) (JobStatus, error)
 		DeleteManyOrganizationMemberships(context.Context, []string) error
 		SetDefaultOrganization(context.Context, OrganizationMembershipOptions) (OrganizationMembership, error)
+		GetUserMemberships(context.Context, *OrganizationMembershipListOptions) ([]OrganizationMembership, Page, error)
 	}
 )
+
+// GetUserMemberships gets the memberships of the specified users
+// ref: https://developer.zendesk.com/api-reference/ticketing/organizations/organization_memberships/#list-memberships
+func (z *Client) GetUserMemberships(ctx context.Context, opts *OrganizationMembershipListOptions) ([]OrganizationMembership, Page, error) {
+	var result struct {
+		OrganizationMemberships []OrganizationMembership `json:"organization_memberships"`
+		Page
+	}
+
+	u, err := addOptions(fmt.Sprintf("/users/%d/organization_memberships.json", opts.UserID), opts.PageOptions)
+	if err != nil {
+		return nil, Page{}, err
+	}
+
+	body, err := z.get(ctx, u)
+	if err != nil {
+		return nil, Page{}, err
+	}
+
+	if err := json.Unmarshal(body, &result); err != nil {
+		return nil, Page{}, err
+	}
+
+	return result.OrganizationMemberships, result.Page, nil
+}
 
 // GetOrganizationMemberships gets the memberships of the specified organization
 // ref: https://developer.zendesk.com/api-reference/ticketing/organizations/organization_memberships/
