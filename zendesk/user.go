@@ -149,6 +149,7 @@ type UserAPI interface {
 	AutocompleteUsers(ctx context.Context, opts *UserListOptions) ([]User, Page, error)
 	ListUserIdentities(ctx context.Context, userID int64) ([]Identity, error)
 	MakeUserIdentityPrimary(ctx context.Context, userID int64, userIdentityID int64) ([]Identity, error)
+	UpdateIdentity(ctx context.Context, userID int64, identityID int64, identity Identity) (Identity, error)
 	CreateOrganizationSubscription(ctx context.Context, sub OrganizationSubscription) (OrganizationSubscription, error)
 	DeleteOrganizationSubscription(ctx context.Context, subID int64) error
 	GetUserOrganizationSubscriptions(ctx context.Context, userID int64, opts *OrganizationListOptions) ([]OrganizationSubscription, Page, error)
@@ -489,6 +490,24 @@ func (z *Client) MakeUserIdentityPrimary(ctx context.Context, userID int64, user
 		return []Identity{}, err
 	}
 	return result.Identities, err
+}
+
+// UpdateIdentity updates user identity
+// https://developer.zendesk.com/api-reference/ticketing/users/user_identities/#update-identity
+func (z *Client) UpdateIdentity(ctx context.Context, userID int64, identityID int64, identity Identity) (Identity, error) {
+	var data, result struct {
+		Identity Identity `json:"identity"`
+	}
+	data.Identity = identity
+	body, err := z.put(ctx, fmt.Sprintf("/users/%d/identities/%d", userID, identityID), data)
+	if err != nil {
+		return Identity{}, err
+	}
+	err = json.Unmarshal(body, &result)
+	if err != nil {
+		return Identity{}, err
+	}
+	return result.Identity, err
 }
 
 // CreateOrganizationSubscription creates new user organization subscription

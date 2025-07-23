@@ -1628,6 +1628,22 @@ func (mr *ClientMockRecorder) GetUserFields(ctx, opts any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserFields", reflect.TypeOf((*Client)(nil).GetUserFields), ctx, opts)
 }
 
+// GetUserMemberships mocks base method.
+func (m *Client) GetUserMemberships(arg0 context.Context, arg1 *zendesk.OrganizationMembershipListOptions) ([]zendesk.OrganizationMembership, zendesk.Page, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetUserMemberships", arg0, arg1)
+	ret0, _ := ret[0].([]zendesk.OrganizationMembership)
+	ret1, _ := ret[1].(zendesk.Page)
+	ret2, _ := ret[2].(error)
+	return ret0, ret1, ret2
+}
+
+// GetUserMemberships indicates an expected call of GetUserMemberships.
+func (mr *ClientMockRecorder) GetUserMemberships(arg0, arg1 any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserMemberships", reflect.TypeOf((*Client)(nil).GetUserMemberships), arg0, arg1)
+}
+
 // GetUserOrganizationSubscriptions mocks base method.
 func (m *Client) GetUserOrganizationSubscriptions(ctx context.Context, userID int64, opts *zendesk.OrganizationListOptions) ([]zendesk.OrganizationSubscription, zendesk.Page, error) {
 	m.ctrl.T.Helper()
@@ -2158,6 +2174,21 @@ func (m *Client) UpdateGroup(ctx context.Context, groupID int64, group zendesk.G
 func (mr *ClientMockRecorder) UpdateGroup(ctx, groupID, group any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateGroup", reflect.TypeOf((*Client)(nil).UpdateGroup), ctx, groupID, group)
+}
+
+// UpdateIdentity mocks base method.
+func (m *Client) UpdateIdentity(ctx context.Context, userID, identityID int64, identity zendesk.Identity) (zendesk.Identity, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateIdentity", ctx, userID, identityID, identity)
+	ret0, _ := ret[0].(zendesk.Identity)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateIdentity indicates an expected call of UpdateIdentity.
+func (mr *ClientMockRecorder) UpdateIdentity(ctx, userID, identityID, identity any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateIdentity", reflect.TypeOf((*Client)(nil).UpdateIdentity), ctx, userID, identityID, identity)
 }
 
 // UpdateMacro mocks base method.
