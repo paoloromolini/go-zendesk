@@ -12,6 +12,7 @@ type TicketCommentAPI interface {
 	CreateTicketComment(ctx context.Context, ticketID int64, ticketComment TicketComment) (TicketComment, error)
 	ListTicketComments(ctx context.Context, ticketID int64, opts *ListTicketCommentsOptions) (*ListTicketCommentsResult, error)
 	MakeCommentPrivate(ctx context.Context, ticketID int64, ticketCommentID int64) error
+	CountTicketComments(ctx context.Context, ticketID int64) (*CountTicketCommentsResult, error)
 }
 
 // TicketComment is a struct for ticket comment payload
@@ -150,6 +151,33 @@ func (z *Client) ListTicketComments(
 
 	return &result, err
 }
+
+// CountTicketCommentsResult contains the result of the CountTicketComments API call
+type CountTicketCommentsResult struct {
+	Count struct {
+		Value        int64     `json:"value"`
+		RefreshedAt time.Time `json:"refreshed_at"`
+	}
+}
+
+// CountTicketComments gets the number of comments for a specified ticket
+//
+// ref: https://developer.zendesk.com/api-reference/ticketing/tickets/ticket_comments/#count-ticket-comments
+func (z *Client) CountTicketComments(ctx context.Context, ticketID int64) (*CountTicketCommentsResult, error) {
+	path := fmt.Sprintf("/tickets/%d/comments/count.json", ticketID)
+	var  err error
+	body, err := z.get(ctx, path)
+	if err != nil {
+		return nil, err
+	}
+	var result CountTicketCommentsResult
+	err = json.Unmarshal(body, &result)
+	if err != nil {
+		return nil, err
+	}
+	return &result, err
+}
+
 
 // MakeCommentPrivate converts an existing ticket comment to an internal note that is not publicly viewable.
 //

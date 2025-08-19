@@ -133,6 +133,21 @@ func (mr *ClientMockRecorder) AutocompleteUsers(ctx, opts any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AutocompleteUsers", reflect.TypeOf((*Client)(nil).AutocompleteUsers), ctx, opts)
 }
 
+// CountTicketComments mocks base method.
+func (m *Client) CountTicketComments(ctx context.Context, ticketID int64) (*zendesk.CountTicketCommentsResult, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CountTicketComments", ctx, ticketID)
+	ret0, _ := ret[0].(*zendesk.CountTicketCommentsResult)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CountTicketComments indicates an expected call of CountTicketComments.
+func (mr *ClientMockRecorder) CountTicketComments(ctx, ticketID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CountTicketComments", reflect.TypeOf((*Client)(nil).CountTicketComments), ctx, ticketID)
+}
+
 // CreateAutomation mocks base method.
 func (m *Client) CreateAutomation(ctx context.Context, automation zendesk.Automation) (zendesk.Automation, error) {
 	m.ctrl.T.Helper()
