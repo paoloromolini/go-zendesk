@@ -102,6 +102,9 @@ type Ticket struct {
 
 	// Comment is POST only and required
 	Comment *TicketComment `json:"comment,omitempty"`
+	// Metadata is used to store additional information about the ticket correspondece during ticket update
+	// and when adding a comment.
+	Metadata    map[string]interface{} `json:"metadata,omitempty"`
 
 	// Requester is POST only and can be used to create a ticket for a nonexistent requester
 	Requester *Requester `json:"requester,omitempty"`
